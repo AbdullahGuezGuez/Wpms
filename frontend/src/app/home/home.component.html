@@ -1,0 +1,17 @@
+<div class="container" *ngIf="_authService.loggedIn()">
+  <div class="jumbotron">
+    <h2>Welcome Back!</h2>
+    <h2>{{ loggedInUser?.fullName }}</h2>
+  </div>
+
+  <div *ngIf="isCrm">
+    <app-all-activities></app-all-activities>
+  </div>
+  <div *ngIf="isPms">
+    <app-project-dashboard></app-project-dashboard>
+    <app-projects></app-projects>
+  </div>
+  <div *ngIf="!isCrm && !isPms">
+    
+  </div>
+</div>

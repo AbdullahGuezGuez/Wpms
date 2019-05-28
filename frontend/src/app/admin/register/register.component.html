@@ -1,0 +1,82 @@
+<div class="row" *ngIf="_authService.loggedIn()">
+  <div class="container">
+    <div class="col-md-12">
+      <div class="panel panel-primary">
+        <div class="panel-body">
+          <h3 class="m-b-30 m-t-0">Register User <i class="mdi mdi-information-outline m-r-15" data-toggle="tooltip"
+              data-placement="top" title="Make sure that the fullname matches with the persons fullname on Google"></i>
+          </h3>
+          <form #registerForm="ngForm" (ngSubmit)="register()">
+            <div class="form-group">
+              <input type="text" class="form-control" id="r1" placeholder="Username" required minlength="2"
+                maxlength="16" [(ngModel)]="model.Username" name="username" #username="ngModel">
+              <div *ngIf="username.errors && (username.dirty || username.touched)" class="alert alert-danger">
+                <div [hidden]="!username.errors.required">
+                  username is required! and max 16 characters.
+                </div>
+                <div [hidden]="!username.errors.minlength">
+                  username must be at least 2 characters long.
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <input type="text" class="form-control" id="r2" placeholder="Fullname" required minlength="2"
+                maxlength="40" [(ngModel)]="model.FullName" name="fullname" #username="ngModel">
+            </div>
+            <div class="form-group">
+              <input type="text" class="form-control" id="r3" placeholder="Email" required minlength="2"
+                maxlength="50" [(ngModel)]="model.Email" name="email" #username="ngModel">
+            </div>
+            <div class="p-3">
+              <form #passwordsForm='ngForm'>
+                <div ngModelGroup="passwords" #passwords="ngModelGroup" appCheckPassword>
+                  <div class="form-group">
+                    <input type="password" class="form-control" id="exampleInputPassword1" required minlength="4"
+                      maxlength="10" name="passwordA" placeholder="Password" #passwordA="ngModel"
+                      [(ngModel)]="model.Password" required id="passwordA">
+                    <div *ngIf="passwordA.invalid && (passwordA.dirty || passwordA.touched)" class="alert alert-danger">
+                      Password is required! and min 4 max 10 characters.
+                    </div>
+                  </div>
+                  <div class="form-group mt-1">
+                    <input type="password" class="form-control" id="exampleInputPassword2"
+                      placeholder="Confirm Password" required minlength="4" maxlength="10" #passwordB="ngModel"
+                      name="passwordB" [(ngModel)]="model.confirmPassword" required id="passwordB">
+                  </div>
+                </div>
+                <div *ngIf="passwordB.invalid && (passwordB.dirty || passwordB.touched)" class="alert alert-danger">
+                  Password confirming is required!
+                </div>
+                <div *ngIf="passwords.errors?.passwordCheck && (passwordB.dirty || passwordB.touched)"
+                  class="alert alert-danger">
+                  Passwords do not match.
+                </div>
+              </form>
+              <br>
+            </div>
+            <div class="form-group" *ngIf="isSystemAdmin">
+              <select id="organizations" class="form-control">
+                <option *ngFor="let organization of organizations" value="{{organization?.id}}">
+                  {{organization?.name}}
+                </option>
+              </select>
+            </div>
+            <div>
+              <mat-radio-group class="role-radio-group" [(ngModel)]="model.Roles" name="selectedRoles" required>
+                <mat-radio-button class="role-radio-button" *ngFor="let role of roles" [value]="role.name">
+                  {{role?.name}}
+                </mat-radio-button>
+              </mat-radio-group>
+            </div><b id="infoText" class="m-b-5">{{infoText}}</b>
+            <br>
+            <br>
+            <div class="form-group">
+              <button [disabled]="!registerForm.valid" class="btn btn-primary waves-effect waves-light m-r-15"
+                type="submit">Registrera ny användare</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

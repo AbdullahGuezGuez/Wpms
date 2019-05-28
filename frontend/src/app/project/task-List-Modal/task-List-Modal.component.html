@@ -1,0 +1,10 @@
+<h2 mat-dialog-title> Tasks </h2>
+<br>
+<mat-dialog-content>
+  <div *ngFor="let item of data.datakey">   <p> {{item}}</p> <br> </div>
+
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <div><button mat-raised-button (click)="close()"> Close </button></div>
+</mat-dialog-actions>

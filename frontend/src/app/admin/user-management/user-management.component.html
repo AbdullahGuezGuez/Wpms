@@ -1,0 +1,107 @@
+<div class="content" *ngIf="_authService.loggedIn()">
+  <div class="container">
+    <div class="col-md-12">
+      <h2 class="m-b-30 m-t-0">Users</h2>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="panel panel-body hover" type="button" data-toggle="modal" data-target=".addUser-modal">
+          <h4 style="display:inline;">Register new user</h4><i style="display:inline;"
+            class="mdi mdi-account-plus m-l-15"></i>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div *ngIf="!isSystemAdmin" class="panel panel-body hover" type="button" (click)="toRoleManagement()">
+          <h4 style="display:inline;">Manage roles</h4><i style="display:inline;" class="mdi mdi-account m-l-15"></i>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="col-sm-4" *ngFor="let user of users">
+            <div class="panel">
+              <div class="panel-body user-card">
+                <div class="media-main">
+                  <a class="pull-left">
+                    <div class="circle-text-user col-lg-1 col-xs-5 col-md-2 pull-left">
+                      {{user.initials}}
+                    </div>
+                  </a>
+                  <div class="info">
+                    <h4>{{user.username}}</h4>
+                    <p class="text-muted">{{user.fullName}}</p>
+                    <p class="text-muted" *ngFor="let role of user.roles">{{role.name}}</p>
+                  </div>
+                </div>
+                <div class="clearfix"></div>
+                <hr>
+                <div class="row">
+                  <button class="btn btn-default waves-effect" (click)="editRolesModal(user)" data-toggle="tooltip"
+                  data-placement="top" title="Change roles for user"><i class="mdi mdi-account-settings-variant"></i></button>
+                  <button class="btn btn-default waves-effect" (click)="maskUserSwal.show()" data-toggle="tooltip"
+                  data-placement="top" title="Mask this user"><i class="mdi mdi-account-off"></i></button>
+                  <swal #maskUserSwal title="Mask confirmation" text="Are you sure you want to mask this user?" type="question" [showCancelButton]="true" [focusCancel]="true" (confirm)="maskUser(user.id)">
+                  </swal>
+                  <button *ngIf="isSystemAdmin" class="btn btn-default waves-effect" (click)="resetPassword(user.id)" data-toggle="tooltip"
+                  data-placement="top" title="Reset password for this user"><i class="mdi mdi-account-key"></i></button>
+                  <button *ngIf="isSystemAdmin" class="btn btn-default waves-effect" data-toggle="modal"
+                  data-target=".changeOrganizations-modal" (click)="organizationClick(user.id)"><i class="fa fa-institution" data-toggle="tooltip"
+                  data-placement="top" title="Add or remove organizations for this user"></i></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!--ADDUSER-MODAL-->
+<div class="modal fade addUser-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content"><button type="button" id="closeAddCustomerModal" class="close" data-dismiss="modal"
+        aria-hidden="true">×</button>
+      <app-register></app-register>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade changeOrganizations-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button id="closeChangeOrganizationsModal" type="button" class="close" data-dismiss="modal"
+          aria-hidden="true">×</button>
+        <h4 class="modal-title" id="myLargeModalLabel">Change organizations</h4>
+      </div>
+      <div class="modal-body">
+        <form #userOrganizationForm="ngForm" (ngSubmit)="updateUsersOrganizations(userOrganizationForm.value)">
+          <div class="form-group col-md-12">
+
+            <mat-selection-list ngModel name="organization">
+              <mat-list-option *ngFor="let organization of organizations" [value]="organization" [selected]="organization.name === 'SUP-Gruppen'">
+                {{organization?.name}}
+              </mat-list-option>
+            </mat-selection-list>
+          </div>
+          <div class="form-group col-md-12">
+              <select id="roleToDelete" class="form-control">
+                <option *ngFor="let organization of organizations" [value]="organization">
+                  {{organization.name}}
+                </option>
+              </select>
+            </div>
+
+          <div class="row"></div>
+          <div class="modal-footer">
+            <button [disabled]="!userOrganizationForm.valid" class="btn btn-primary btn-rounded waves-effect waves-light"
+              type="submit">Change Organizations</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

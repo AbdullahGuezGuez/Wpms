@@ -1,0 +1,276 @@
+<div class="col-md-12">
+  <div class="panel panel-body">
+    <div class="row">
+      <h3 style="display:inline;" class="m-t-0 m-l-15 m-b-30">Trello Graphs</h3>
+      <a style="display:inline;" type="button" data-toggle="modal" data-target=".swapTrelloConnection-modal"
+        class="btn waves-effect btn-default m-t-5 m-r-15 btn-lg pull-right"><i data-toggle="tooltip"
+          data-placement="top" title="Change or Add Trello Connection" class="mdi mdi-swap-horizontal"></i>
+      </a>
+      <div *ngIf="project?.hasTrello" style="display:inline;">
+        <a style="display:inline;" type="button" data-toggle="tooltip" *ngIf="!toggleGraph" (click)="toggleGraphs()"
+          data-placement="top" title="Change to the task view"
+          class="btn waves-effect btn-default m-t-5 m-r-15 btn-lg pull-right">Task View
+        </a>
+        <a style="display:inline;" type="button" data-toggle="tooltip" *ngIf="toggleGraph" (click)="toggleGraphs()"
+          data-placement="top" title="Change to the time view"
+          class="btn waves-effect btn-default m-t-5 m-r-15 btn-lg pull-right">Time View
+        </a>
+      </div>
+    </div>
+    <br>
+    <br>
+    <div class="row" *ngIf="project?.hasTrello">
+      <div class="col-md-3 m-b-15 m-t-30" *ngIf="!toggleGraph">
+        <table class="table table-striped m-b-0">
+          <tr>
+            <td>
+              Trelloboard:
+            </td>
+            <td>
+              {{project?.trelloBoardName}}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Total Backlog time:
+            </td>
+            <td>
+              {{project?.estimatedTime - project?.completedTime - project?.inProductionTime - project?.inTestTime}}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              In Production time:
+            </td>
+            <td>
+              {{project?.inProductionTime}}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              In Test time:
+            </td>
+            <td>
+              {{project?.inTestTime}}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Done:
+            </td>
+            <td>
+              {{project?.completedTime}}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>Total time:</b>
+            </td>
+            <td>
+              <b>{{project?.estimatedTime}}</b>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="col-md-9" *ngIf="!toggleGraph">
+        <canvas baseChart
+          [data]="[project?.estimatedTime - project?.completedTime - project?.inProductionTime - project?.inTestTime, project?.inProductionTime, project?.inTestTime, project?.completedTime]"
+          [colors]="pieChartColors" [labels]="pieChartLabels" [chartType]="pieChartType">
+        </canvas>
+        <br>
+        <br>
+      </div>
+      <div class="col-md-3 m-b-15 m-t-30" *ngIf="toggleGraph">
+        <table class="table table-striped m-b-0">
+          <tr>
+            <td>
+              Trelloboard:
+            </td>
+            <td>
+              {{project?.trelloBoardName}}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Total Backlog count:
+            </td>
+            <td>
+              {{project?.estimatedCount - project?.completedCount - project?.inProductionCount - project?.inTestCount}}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              In Production count:
+            </td>
+            <td>
+              {{project?.inProductionCount}}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              In Test count:
+            </td>
+            <td>
+              {{project?.inTestCount}}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Done count:
+            </td>
+            <td>
+              {{project?.completedCount}}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>Total Task count:</b>
+            </td>
+            <td>
+              <b>{{project?.estimatedCount}}</b>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="col-md-9" *ngIf="toggleGraph">
+        <canvas baseChart
+          [data]="[project?.estimatedCount - project?.completedCount - project?.inProductionCount - project?.inTestCount, project?.inProductionCount, project?.inTestCount, project?.completedCount]"
+          [colors]="pieChartColors" [labels]="pieChartLabels" [chartType]="pieChartType">
+        </canvas>
+        <br>
+        <br>
+      </div>
+    </div>
+    <h4 class="m-l-30" *ngIf="!project?.hasTrello"><i class="mdi mdi-alert-outline m-r-30"></i> Could not find any
+      Trellodata for this project!</h4>
+
+
+    <!-- <div class="col-md-12 pull left">                                               DETTA ÄR EN BURNDOWN-CHART SOM SKULLE KUNNA IMPLEMENTERAS
+        <div class="flex">
+            <div class="flex-item">
+              <div style="display: block;">
+              <canvas baseChart width="300" height="100"
+                          [datasets]="lineChartData"
+                          [labels]="lineChartLabels"
+                          [options]="lineChartOptions"
+                          [colors]="lineChartColors"
+                          [legend]="lineChartLegend"
+                          [chartType]="lineChartType"
+                          (chartHover)="chartHovered($event)"
+                          (chartClick)="chartClicked($event)"></canvas>
+              </div>
+            </div>
+            <div class="flex-item">
+              <br>
+              <table class="table table-responsive table-condensed">
+                <tr>
+                  <th></th>
+                  <th *ngFor="let label of lineChartLabels">{{label}}</th>
+                </tr>
+                <tr *ngFor="let d of lineChartData; let i=index" [class]="'line-'+i">
+                    <td class="tdBold">
+                        {{d.label}}
+                    </td>
+                  <td *ngFor="let label of lineChartLabels; let j=index">{{d && d.data[j]}}</td>
+                </tr>
+              </table>
+            </div>
+          </div>
+          <br>
+        </div> -->
+
+  </div>
+</div>
+
+
+
+<!--swapTrelloConnection-MODAL-->
+<div class="modal fade swapTrelloConnection-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" id="closeModal" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title" id="myLargeModalLabel">Trello Connection
+          <i class="mdi mdi-information-outline m-r-15" data-toggle="tooltip" data-placement="top"
+            title="Trelloboards with projects already connected to them are not availble"></i>
+        </h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h4 class="panel-title">
+                  <a data-toggle="collapse" href="#SwapTrello" class="collapsed" aria-expanded="false">
+                    Change to existing Trelloboard
+                  </a>
+                </h4>
+              </div>
+              
+              <div id="SwapTrello" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                <div class="panel-body">
+                  <form #removeOrChangeForm="ngForm">
+                  <label>Trelloboards</label>
+                  <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group" name="selectedBoard" [(ngModel)]="selectedBoard" required>
+                    <mat-radio-button class="example-radio-button" *ngFor="let board of availableBoards"
+                      [value]="board.id">
+                      {{board.name}}
+                    </mat-radio-button>
+                  </mat-radio-group>
+                  <br>
+                  <button class="btn btn-danger btn-rounded waves-effect waves-light m-r-15"
+                    (click)="removeBoardConnectionSwal.show()">Remove Connection</button>
+                  <swal #removeBoardConnectionSwal title="Remove Trello confirmation"
+                    text="Are you sure you want to remove connection to Trello?" type="question"
+                    [showCancelButton]="true" [focusCancel]="true" (confirm)="removeBoardConnection()">
+                  </swal>
+                  <button (click)="changeBoardConnectionSwal.show()" [disabled]="!removeOrChangeForm.valid"
+                    class="btn btn-primary btn-rounded waves-effect waves-light">Change Board</button>
+                  <swal #changeBoardConnectionSwal title="Change Trelloboard confirmation"
+                    text="Are you sure you want to change connection to Trello?" type="question"
+                    [showCancelButton]="true" [focusCancel]="true" (confirm)="changeBoardConnection()">
+                  </swal>
+                </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h4 class="panel-title">
+                  <a data-toggle="collapse" href="#CreateTrello" class="collapsed" aria-expanded="false">
+                    Create a new Trelloboard
+                  </a>
+                </h4>
+              </div>
+              <form #addBoardForm="ngForm">
+              <div id="CreateTrello" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                <div class="panel-body">
+                  <div class="form-group">
+                    <div class="col-md-10"><label>Trelloboard name</label>
+                      <input type="text" required minlength="3" maxlength="30" class="form-control"
+                        [(ngModel)]="model.name" name="trelloboardname">
+                    </div>
+                  </div>
+                  <div class="row m-t-15">
+                    <button (click)="createBoardConnectionSwal.show()" [disabled]="!addBoardForm.valid"
+                      class="btn btn-primary btn-rounded waves-effect waves-light m-t-15 m-l-15">Create Board</button>
+                    <swal #createBoardConnectionSwal title="Create Trelloboard"
+                      text="Are you sure you want to create a new Trelloboard?" type="question"
+                      [showCancelButton]="true" [focusCancel]="true" (confirm)="createNewTrelloBoard()">
+                    </swal>
+                  </div>
+                </div>
+              </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

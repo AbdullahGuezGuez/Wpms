@@ -1,0 +1,79 @@
+<div class="col-md-12">
+  <div class="panel panel-body">
+    <div class="row" *ngIf="data?.numberOfProjects > 0">
+      <div class="col-md-4" *ngFor="let project of data?.projects">
+        <div class="row">
+          <div class="m-l-15 media-main">
+            <a class="pull-left">
+              <div class="circle-text-priority1-3 collapsed">{{project?.priority}}</div>
+            </a>
+          </div>
+          <h3 class="m-l-10">{{project?.name}}</h3>
+        </div>
+        <hr>
+        <div *ngIf="project?.values.hasTrello">
+          <canvas baseChart
+            [data]="[project?.values.estimatedTime - project?.values.completedTime - project?.values.inProductionTime - project?.values.inTestTime, project?.values.inProductionTime, project?.values.inTestTime, project?.values.completedTime]"
+            [colors]="pieChartColors" [labels]="pieChartLabels" [chartType]="pieChartType">
+          </canvas>
+        </div>
+        <div *ngIf="!project?.values.hasTrello">
+          <div style="display: block">
+            <canvas baseChart [data]="[1]" [colors]="pieChartColorsWithoutTrello" [labels]="pieChartLabelsWithoutTrello"
+              [chartType]="pieChartType">
+            </canvas>
+          </div>
+        </div>
+
+        <br>
+        <h4 class="text-muted">Tasks in production</h4>
+
+        <div *ngIf="project?.hasCards">
+          <div class="panel panel-body hover"  type="button" *ngFor="let card of project?.productionCards | slice: 0:10;" (click)="goToTrelloCard(card?.url)">
+            <div class="row">
+              <div class="col-md-10 m-t-5">
+                <b>{{card?.content}}</b>
+              </div>
+              <div class="col-md-2 m-l-5 pull-right">
+                <div *ngIf="card.hasEstimatedTime" class="circle-text-estimate">{{card?.estimatedTime}}</div>
+                <div *ngIf="!card.hasEstimatedTime" class="circle-text-notestimate">-</div>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div *ngIf="card?.hasAssignedUser" class="col-md-12">
+                <i class="mdi mdi-human-greeting inline"></i>
+                <p class="inline m-l-10"> {{card?.user}}</p>
+              </div>
+              <div *ngIf="!card?.hasAssignedUser" class="col-md-12">
+                <i class="mdi mdi-alert-outline inline"></i>
+                <b class="inline m-l-10"> This card does not have an assigned user!</b>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="!project?.hasCards">
+          <div class="panel panel-body hover" type="button">
+            <div class="row">
+              <div class="col-md-12">
+                <i class="mdi mdi-alert-outline inline"></i>
+                <b class="inline m-l-10"> There is no Tasks in Production</b>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-md-12">
+                <b class="inline m-l-10">No one is currently working on this project</b>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="data?.numberOfProjects == 0" class="row">
+      <div class="col-md-12">
+          <h2><i class="mdi mdi-alert-outline inline"></i> No Projects exists!</h2>
+      </div>
+      </div>
+  </div>

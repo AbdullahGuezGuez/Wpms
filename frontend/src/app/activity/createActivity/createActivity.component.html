@@ -1,0 +1,203 @@
+<div *ngIf="_authService.loggedIn()">
+  <div class="container">
+    <div class="panel">
+      <div class="panel-body">
+        <div class="modal-header">
+          <h2 class="modal-title pull-left m-b-15">Create Activity</h2>
+        </div>
+        <div class="modal-body">
+          <form class="form-group" (ngSubmit)="addActivity(activityForm.value)" #activityForm="ngForm">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="col-md-6 form-group">
+                  <label>Title</label>
+                  <input type="text" required minlength="2" maxlength="20" class="form-control" name="title" ngModel>
+                </div>
+
+                <div class="form-group col-md-6 col-xs-12">
+                  <div *ngIf="!isCustomer">
+                    <label>Choose Customer</label>
+                    <select type="text" class="form-control" ngModel name="customerId" #customer="ngModel"
+                      (change)="getAllContactsForSelectedCustomer($event.target.value)">
+                      <option *ngFor="let customer of customers" [value]="customer?.id">{{customer?.name}}</option>
+                    </select>
+                  </div>
+                  <div *ngIf="isCustomer">
+                    <label>Choosen Customer</label>
+                    <input type="text" class="form-control" value="{{customer?.name}}" readonly="readonly">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group col-md-6 col-xs-12 pull-left">
+                  <label>Type</label>
+                  <select type="text" class="form-control" ngModel name="type" #type="ngModel">
+                    <option *ngFor="let type of types">{{type}}</option>
+                  </select>
+                </div>
+
+                <div class="form-group col-md-6 col-xs-12 pull-right" #createActivityModal>
+                  <label style="margin-right: 6px;">Date</label>
+                  <br>
+                  <mat-form-field class="topz">
+                    <input matInput [matDatepickerFilter]="myFilter" [matDatepicker]="picker"
+                      (dateChange)="setDate(picker)" ngModel name="date">
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker touchUi #picker></mat-datepicker>
+                  </mat-form-field>
+
+                  <input class="m-l-15" type="time" value="{{model?.time}}" [(ngModel)]="model.time" name="time"
+                    #time="ngModel">
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group col-md-12">
+                  <label>Result</label>
+                  <textarea type="text" rows="8" class="form-control" required minlength="2" maxlength="1000" ngModel
+                    name="description" #result="ngModel">
+                    </textarea>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="form-group col-md-6 pull-left">
+                <label>Businessparticipants</label>
+                <mat-selection-list ngModel name="UsersForActivity">
+                  <mat-list-option *ngFor="let businessParticipant of businessParticipants"
+                    [value]="businessParticipant">
+                    {{businessParticipant?.fullName}}
+                  </mat-list-option>
+                </mat-selection-list>
+              </div>
+
+              <div class="form-group col-md-6 pull-right">
+                <label>Customerparticipants</label>
+                <mat-selection-list ngModel name="ContactpersonsForActivity">
+                  <mat-list-option *ngFor="let customerParticipant of customerParticipants"
+                    [value]="customerParticipant">
+                    {{customerParticipant?.name}}
+                  </mat-list-option>
+                </mat-selection-list>
+              </div>
+            </div>
+
+            <!--Nextstep Panel-->
+            <div class="row">
+              <div class="col-md-12">
+                <div class="panel-group" id="accordion-test-2">
+                  <div class="panel panel-primary panel-color">
+                    <div class="panel-heading">
+                      <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion-test-2" href="#collapseOne-2"
+                          aria-expanded="false" class="collapsed">
+                          Nextstep
+                        </a>
+                      </h4>
+                    </div>
+                    <div id="collapseOne-2" class="panel-collapse collapse">
+                      <div class="panel-body">
+                        <!--Form för nextstep-->
+                        <div class="row">
+                          <div class="col-md-12">
+                            <div class="col-md-6 form-group">
+                              <label>Title</label>
+                              <input type="text" class="form-control" ngModel name="nextstepTitle">
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="row">
+                          <div class="col-md-12">
+                            <div class="form-group col-md-6 col-xs-12 pull-left">
+                              <label>Type</label>
+                              <select type="text" class="form-control" ngModel name="nextstepType" #type="ngModel">
+                                <option *ngFor="let type of types">{{type}}</option>
+                              </select>
+                            </div>
+
+                            <div class="form-group col-md-6 col-xs-12 pull-right" #createActivityModal>
+                              <label style="margin-right: 6px;">Date</label>
+                              <br>
+                              <mat-form-field>
+                                <input matInput [matDatepickerFilter]="myFilter" [matDatepicker]="pickernextstep"
+                                  (dateChange)="setNextStepDate(picker)" ngModel name="nextstepDate">
+                                <mat-datepicker-toggle matSuffix [for]="pickernextstep"></mat-datepicker-toggle>
+                                <mat-datepicker touchUi #pickernextstep></mat-datepicker>
+                              </mat-form-field>
+
+                              <input class="m-l-15" type="time" value="{{model?.nextstepTime}}"
+                                [(ngModel)]="model.nextstepTime" name="nextstepTime" #time="ngModel">
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="row">
+                          <div class="col-md-12">
+                            <div class="form-group col-md-12">
+                              <label>Result</label>
+                              <textarea type="text" rows="8" class="form-control" required minlength="2"
+                                maxlength="1000" ngModel name="nextstepDescription" #result="ngModel">
+                                    </textarea>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="row">
+                          <div class="form-group col-md-6 pull-left">
+                            <label>Businessparticipants</label>
+                            <mat-selection-list ngModel name="nextstepUsersForActivity">
+                              <mat-list-option *ngFor="let businessParticipant of businessParticipants"
+                                [value]="businessParticipant">
+                                {{businessParticipant?.fullName}}
+                              </mat-list-option>
+                            </mat-selection-list>
+                          </div>
+
+                          <div class="form-group col-md-6 pull-right">
+                            <label>Customerparticipants</label>
+                            <mat-selection-list ngModel name="nextstepContactpersonsForActivity">
+                              <mat-list-option *ngFor="let customerParticipant of customerParticipants"
+                                [value]="customerParticipant">
+                                {{customerParticipant?.name}}
+                              </mat-list-option>
+                            </mat-selection-list>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row"></div>
+            <div class="row">
+              <div class="modal-footer">
+
+                <div class="col-md-5 col-md-offset-7">
+                  <div class="col-md-8">
+                    <mat-selection-list #nextstep (click)="changeSelected()">
+                      <mat-list-option>
+                        Include Nextstep
+                      </mat-list-option>
+                    </mat-selection-list>
+                  </div>
+                  <div class="col-md-4" style="padding-top: 10px;">
+                    <button class="btn btn-primary btn-rounded waves-effect waves-light" type="submit">Create
+                      Activity</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,683 @@
+<div class="container" *ngIf="_authService.loggedIn()">
+  <div class="col-md-12">
+    <div class="row">
+      <!--Logo namn + Settings o status-->
+      <div class="col-md-12 col-xs-12 col-sm-12">
+        <div class="col-md-2 col-lg-1 col-sm-2 col-xs-3">
+          <!--Logo-->
+          <div class="media-main">
+            <a class="pull-left">
+              <img class="thumb-lg img-circle" src="assets/images/users/avatar-2.jpg" alt="">
+            </a>
+          </div>
+        </div>
+        <div class="col-md-4  col-sm-5 col-xs-7 pull-left">
+          <!--namn-->
+          <div class="info">
+            <h1 class="m-l-15" style="display:inline;">{{customer?.customer.name}}</h1>
+            <a style="display:inline;" id="customerName" data-toggle="collapse" href="#showChangeCustomerName"
+              class="collapsed" aria-expanded="false"><i class="mdi mdi-lead-pencil valueChangerIcon m-l-15"></i></a>
+
+            <div id="showChangeCustomerName" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+              <div class="panel-body">
+                <br>
+
+                <form #registerForm="ngForm" (ngSubmit)="changeCustomerName()">
+                  <div class="col-lg-7">
+                    <div class="form-group">
+                      <input type="text" class="form-control customerInfoAttributeForm" required minlength="2"
+                        maxlength="30" [(ngModel)]="model.name" name="CustomerName" #name="ngModel">
+                    </div>
+                  </div>
+                  <div class="col-lg-4 pull-right">
+                    <button type="button" href="#showChangeCustomerName" data-toggle="collapse"
+                      class="btn btn-danger editable-cancel btn-sm waves-effect m-r-5"><i
+                        class="mdi mdi-close"></i></button>
+                    <button type="submit" class="btn btn-success editable-submit btn-sm waves-effect waves-light"><i
+                        class="mdi mdi-check"></i></button>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <br>
+            <br>
+            <h3 style="display:inline;" class="text-muted m-l-15">{{customer?.status}}</h3>
+            <a style="display:inline;" id="customerStatus" data-toggle="collapse" href="#showChangeCustomerStatus"
+              class="collapsed" aria-expanded="false"><i class="mdi mdi-lead-pencil valueChangerIcon m-l-15"></i></a>
+
+            <div id="showChangeCustomerStatus" class="panel-collapse collapse" aria-expanded="false"
+              style="height: 0px;">
+              <div class="panel-body">
+
+                <form #registerForm="ngForm" (ngSubmit)="changeCustomerStatus()">
+                  <div class="col-lg-7">
+                    <div class="form-group">
+                      <select type="text" class="form-control customerInfoAttributeForm"
+                        [(ngModel)]="model.customerStatus" name="CustomerStatus" #name="ngModel">
+                        <option value="2">
+                          Customer
+                        </option>
+                        <option value="0">
+                          Suspect
+                        </option>
+                        <option value="1">
+                          Prospect
+                        </option>
+                        <option value="3">
+                          Inactive
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-lg-4 pull-right">
+                    <button type="button" href="#showChangeCustomerStatus" data-toggle="collapse"
+                      class="btn btn-danger editable-cancel btn-sm waves-effect m-r-5"><i
+                        class="mdi mdi-close"></i></button>
+                    <button type="submit" class="btn btn-success editable-submit btn-sm waves-effect waves-light"><i
+                        class="mdi mdi-check"></i></button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-2  col-xs-2 pull-right">
+          <!--settings-->
+          <a type="button" (click)="backToCustomerList()"
+            class="btn waves-effect btn-default m-t-5 btn-lg pull-right"><i class="glyphicon glyphicon-remove"></i> </a>
+        </div>
+      </div>
+    </div>
+    <br>
+    <app-activity></app-activity>
+    <div class="row">
+
+      <div class="col-md-7 col-lg-8 pull-left">
+        <!-- CUSTOMER INFO -->
+        <div class="panel panel-primary">
+          <div class="panel-body">
+            <h3 class="m-t-0 m-b-30">Customer Info</h3>
+            <br>
+            <p>{{customer?.customer.customerDescription}}<a id="customerDescription" data-toggle="collapse"
+                href="#showChangeCustomerDescription" class="collapsed" aria-expanded="false"><i
+                  class="mdi mdi-lead-pencil valueChangerIcon m-l-15"></i></a></p>
+
+            <div id="showChangeCustomerDescription" class="panel-collapse collapse" aria-expanded="false"
+              style="height: 0px;">
+              <div class="panel-body">
+                <form #registerForm="ngForm" (ngSubmit)="changeCustomerCustomerDescription()">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <textarea type="text" rows="6" class="form-control customerInfoAttributeForm"
+                        [(ngModel)]="model.customerDescription" name="customerDescription"
+                        #name="ngModel">{{customer?.customer.customerDescription}}</textarea>
+                    </div>
+                  </div>
+                  <div class="col-lg-2 pull-right">
+                    <button type="button" href="#showChangeCustomerDescription" data-toggle="collapse"
+                      class="btn btn-danger editable-cancel btn-sm waves-effect m-r-5"><i
+                        class="mdi mdi-close"></i></button>
+                    <button type="submit" class="btn btn-success editable-submit btn-sm waves-effect waves-light"><i
+                        class="mdi mdi-check"></i></button>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <hr>
+            <div class="col-lg-6 col-md-12 col-xs-12 pull-left">
+              <div>
+                <table class="table table-striped">
+                  <tbody>
+                    <tr>
+                      <td>
+                        Region:
+                      </td>
+                      <td>{{customer?.customer.region}}
+                        <a id="region" data-toggle="collapse" href="#showChangeRegion" class="collapsed"
+                          aria-expanded="false"><i class="mdi mdi-lead-pencil valueChangerIcon m-l-15"></i></a>
+                        <div id="showChangeRegion" class="panel-collapse collapse" aria-expanded="false"
+                          style="height: 0px;">
+                          <div class="panel-body">
+                            <form #registerForm="ngForm" (ngSubmit)="changeCustomerRegion()">
+                              <div class="col-md-12">
+                                <div class="form-group">
+                                  <input type="text" class="form-control customerInfoAttributeForm" required
+                                    minlength="2" maxlength="20" [(ngModel)]="model.region" name="region"
+                                    #name="ngModel">
+                                </div>
+                              </div>
+                              <div class="col-lg-6 pull-right">
+                                <button type="button" href="#showChangeRegion" data-toggle="collapse"
+                                  class="btn btn-danger editable-cancel btn-sm waves-effect m-r-5"><i
+                                    class="mdi mdi-close"></i></button>
+                                <button type="submit"
+                                  class="btn btn-success editable-submit btn-sm waves-effect waves-light"><i
+                                    class="mdi mdi-check"></i></button>
+                              </div>
+                            </form>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        Address:
+                      </td>
+                      <td>
+                        {{customer?.customer.address}}
+                        <a id="address" data-toggle="collapse" href="#showChangeAddress" class="collapsed"
+                          aria-expanded="false"><i class="mdi mdi-lead-pencil valueChangerIcon m-l-15"></i></a>
+                        <div id="showChangeAddress" class="panel-collapse collapse" aria-expanded="false"
+                          style="height: 0px;">
+                          <div class="panel-body">
+                            <form #registerForm="ngForm" (ngSubmit)="changeCustomerAddress()">
+                              <div class="col-md-12">
+                                <div class="form-group">
+                                  <input type="text" class="form-control customerInfoAttributeForm" required
+                                    minlength="2" maxlength="30" [(ngModel)]="model.address" name="Address"
+                                    #name="ngModel">
+                                </div>
+                              </div>
+                              <div class="col-lg-6 pull-right">
+                                <button type="button" href="#showChangeAddress" data-toggle="collapse"
+                                  class="btn btn-danger editable-cancel btn-sm waves-effect m-r-5"><i
+                                    class="mdi mdi-close"></i></button>
+                                <button type="submit"
+                                  class="btn btn-success editable-submit btn-sm waves-effect waves-light"><i
+                                    class="mdi mdi-check"></i></button>
+                              </div>
+                            </form>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        Org.Nr:
+                      </td>
+                      <td>
+                        {{customer?.customer.organizationNumber}}
+                        <a id="organizationNumber" data-toggle="collapse" href="#showChangeOrganizationNumber"
+                          class="collapsed" aria-expanded="false"><i
+                            class="mdi mdi-lead-pencil valueChangerIcon m-l-15"></i></a>
+                        <div id="showChangeOrganizationNumber" class="panel-collapse collapse" aria-expanded="false"
+                          style="height: 0px;">
+                          <div class="panel-body">
+                            <form #registerForm="ngForm" (ngSubmit)="changeCustomerOrganizationNumber()">
+                              <div class="col-md-12">
+                                <div class="form-group">
+                                  <input type="text" class="form-control customerInfoAttributeForm" required
+                                    minlength="2" maxlength="20" [(ngModel)]="model.organizationNumber"
+                                    name="organizationNumber" #name="ngModel">
+                                </div>
+                              </div>
+                              <div class="col-lg-6 pull-right">
+                                <button type="button" href="#showChangeOrganizationNumber" data-toggle="collapse"
+                                  class="btn btn-danger editable-cancel btn-sm waves-effect m-r-5"><i
+                                    class="mdi mdi-close"></i></button>
+                                <button type="submit"
+                                  class="btn btn-success editable-submit btn-sm waves-effect waves-light"><i
+                                    class="mdi mdi-check"></i></button>
+                              </div>
+                            </form>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="col-lg-6 col-md-12 col-xs-12 pull-right">
+              <div class="table-responsive">
+                <table id="mainTable" class="table table-striped m-b-0">
+                  <tbody>
+
+                    <tr>
+                      <td>
+                        Mail:
+                      </td>
+                      <td>
+                        {{customer?.customer.customermail}}
+                        <a id="customermail" data-toggle="collapse" href="#showChangeCustomermail" class="collapsed"
+                          aria-expanded="false"><i class="mdi mdi-lead-pencil valueChangerIcon m-l-15"></i></a>
+                        <div id="showChangeCustomermail" class="panel-collapse collapse" aria-expanded="false"
+                          style="height: 0px;">
+                          <div class="panel-body">
+                            <form #registerForm="ngForm" (ngSubmit)="changeCustomerCustomermail()">
+                              <div class="col-md-12">
+                                <div class="form-group">
+                                  <input type="text" class="form-control customerInfoAttributeForm" required
+                                    minlength="2" maxlength="20" [(ngModel)]="model.customermail" name="customermail"
+                                    #name="ngModel">
+                                </div>
+                              </div>
+                              <div class="col-lg-8 pull-right">
+                                <button type="button" href="#showChangeCustomermail" data-toggle="collapse"
+                                  class="btn btn-danger editable-cancel btn-sm waves-effect m-r-5"><i
+                                    class="mdi mdi-close"></i></button>
+                                <button type="submit"
+                                  class="btn btn-success editable-submit btn-sm waves-effect waves-light"><i
+                                    class="mdi mdi-check"></i></button>
+                              </div>
+                            </form>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        Telephone:
+                      </td>
+                      <td>
+                        {{customer?.customer.telephone}}
+                        <a id="telephone" data-toggle="collapse" href="#showChangeTelephone" class="collapsed"
+                          aria-expanded="false"><i class="mdi mdi-lead-pencil valueChangerIcon m-l-15"></i></a>
+                        <div id="showChangeTelephone" class="panel-collapse collapse" aria-expanded="false"
+                          style="height: 0px;">
+                          <div class="panel-body">
+                            <form #registerForm="ngForm" (ngSubmit)="changeCustomerTelephone()">
+                              <div class="col-md-12">
+                                <div class="form-group">
+                                  <input type="text" class="form-control customerInfoAttributeForm" required
+                                    minlength="2" maxlength="20" [(ngModel)]="model.telephone" name="telephone"
+                                    #name="ngModel">
+                                </div>
+                              </div>
+                              <div class="col-lg-8 pull-right">
+                                <button type="button" href="#showChangeTelephone" data-toggle="collapse"
+                                  class="btn btn-danger editable-cancel btn-sm waves-effect m-r-5"><i
+                                    class="mdi mdi-close"></i></button>
+                                <button type="submit"
+                                  class="btn btn-success editable-submit btn-sm waves-effect waves-light"><i
+                                    class="mdi mdi-check"></i></button>
+                              </div>
+                            </form>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        First Contacted:
+                      </td>
+                      <td>
+                        {{customer?.customer.firstContacted | date:'yyyy-MM-dd'}}
+                      </td>
+                    </tr>
+                    <tr *ngFor="let customfield of customer?.customer.customFields">
+                      <td>
+                        {{customfield.title}}
+                      </td>
+                      <td>
+                        {{customfield.data}}
+                        <swal #deleteSwal title="Delete customfield" text="{{customfield.title}}: {{customfield.data}}"
+                          type="question" [showCancelButton]="true" [focusCancel]="true"
+                          (confirm)="deleteCustomField(customfield.id)">
+                        </swal>
+                        <a style="cursor:pointer;" (click)="deleteSwal.show()"><i
+                            class="glyphicon glyphicon-remove valueChangerIcon m-l-15"></i></a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <br>
+            <div class="row">
+              <div class="col-md-12 pull-right">
+                <div class="panel panel-info">
+                  <div class="col-md-2 pull-right">
+                    <a type="button" id="addCustomFieldBtn" data-toggle="collapse" data-parent="#accordion-test-2"
+                      href="#showCustomFieldEdit" class="collapsed" aria-expanded="false"
+                      class="btn waves-effect m-t-5 btn-default btn-lg pull-right"><i class="mdi mdi-playlist-plus"></i>
+                    </a>
+                  </div>
+                  <div id="showCustomFieldEdit" class="panel-collapse collapse" aria-expanded="false"
+                    style="height: 0px;">
+                    <div class="panel-body">
+                      <form #registerForm="ngForm" (ngSubmit)="addCustomField()">
+                        <hr>
+                        <div class="row">
+                          <div class="form-group col-md-6 pull-left">
+                            <label>Title</label>
+                            <input type="text" class="form-control customerInfoAttributeForm" required minlength="2"
+                              maxlength="20" [(ngModel)]="model.title" name="title" #name="ngModel">
+                          </div>
+
+                          <div class="form-group col-md-6 pull-right">
+                            <label>Data</label>
+                            <input type="text" class="form-control customerInfoAttributeForm" required minlength="1"
+                              maxlength="25" [(ngModel)]="model.data" name="data" #region="ngModel">
+                          </div>
+                        </div>
+
+                        <div class="row">
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" href="#showCustomFieldEdit" data-toggle="collapse"
+                            class="btn btn-danger editable-cancel btn-sm waves-effect m-r-5"><i
+                              class="mdi mdi-close"></i></button>
+                          <button [disabled]="!registerForm.valid" type="submit"
+                            class="btn btn-success editable-submit btn-sm waves-effect waves-light"><i
+                              class="mdi mdi-check"></i></button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-5 col-lg-4 col-xs-12 col-sm-12 pull-right">
+        <!-- CONTACTS -->
+        <div class="panel panel-primary">
+          <div class="panel-body">
+            <h3 class="m-t-0 m-b-30">Contacts</h3>
+            <div class="row">
+              <div class="col-md-12 col-xs-12">
+                <div class="col-md-10 pull-left">
+                  <div fxLayout fxLayoutAlign="left" class="m-l-15">
+                    <mat-form-field fxFlex="50%">
+                      <input matInput type="text" (keyup)="doFilter($event.target.value)" placeholder="Filter">
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="col-md-2 pull-right">
+                  <a type="button" data-toggle="modal" data-target=".addContact-modal"
+                    class="btn waves-effect m-t-5 btn-default btn-lg pull-right"><i class="mdi mdi-account-plus"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+            <hr style="margin-bottom: 0px;">
+
+            <table mat-table class="table-hover" [dataSource]="dataSource" matSort>
+              <ng-container matColumnDef="name">
+                <td mat-cell *matCellDef="let element" style="padding-right: 0px;">
+                  <div class="row justify-content-between" id="contactCard" (click)=SelectedContact(element.id)
+                    data-toggle="modal" data-target=".viewContact-modal">
+                    <div class="row">
+                      <div class="col-md-12 col-xs-12 col-sm-12">
+                        <div style="padding-top: 18px;">
+                          <div *ngIf="element.responsible" class="circle-text-responsible col-lg-1 col-xs-5 col-md-2 pull-left">
+                            {{element.initials}}
+                          </div>
+                          <div *ngIf="!element.responsible" class="circle-text col-lg-1 col-xs-5 col-md-2 pull-left">
+                            {{element.initials}}
+                          </div>
+                        </div>
+                        <div class="col-lg-8 col-md-6 col-xs-7" >
+                          <div class="row">
+                            <h4 style="padding-left: 25px;">{{element.name}}</h4>
+                          </div>
+                          <div class="row">
+                            <h5 class="text-muted" style="padding-left: 25px;">{{element.role}}</h5>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+              </ng-container>
+
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+            <div *ngIf="noData | async" class="no-records">
+              No contacts found
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-7 col-lg-8 col-sm-12 pull-left">
+        <!-- PROJECT INFO -->
+        <div class="panel panel-primary">
+          <div class="panel-body">
+            <h3 class="m-t-0 m-b-30">Projects</h3>
+            <hr>
+            <div class="col-lg-6" *ngFor="let project of projects">
+              <h4>{{project.name}}</h4>
+              <br>
+              <div id={{project.id}} style="display: block" *ngIf="project.estimatedTime > 2">
+                <canvas baseChart [data]="[project.estimatedTime - project.usedTime, project.usedTime]"
+                  [colors]="pieChartColors" [labels]="pieChartLabels" [chartType]="pieChartType">
+                </canvas>
+              </div>
+              <div id={{project.id}} style="display: block" *ngIf="project.estimatedTime < 2">
+                <canvas baseChart [data]="[1]" [colors]="pieChartColorsWithoutTrello"
+                  [labels]="pieChartLabelsWithoutTrello" [chartType]="pieChartType">
+                </canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--VIEWCONTACT-MODAL-->
+<div class="modal fade viewContact-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div *ngIf="contact.responsible" class="circle-text-responsible col-lg-1 col-xs-5 col-md-2 m-r-5 pull-left">
+          {{contact.initials}}
+        </div>
+        <div *ngIf="!contact.responsible" class="circle-text col-lg-1 col-xs-5 col-md-2 m-r-5 pull-left">
+          {{contact.initials}}
+        </div>
+        <button type="button" id="closeCustomerModal" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <div class="col-md-6 col-xs-5 m-l-15 m-t-15">
+          <h2 class="modal-title" id="myLargeModalLabel">{{contact.name}}</h2>
+        </div>
+        <div *ngIf="!contact.masked" class="col-md-1 col-xs-2">
+          <a id="contactName" data-toggle="collapse" href="#showChangeContactName" class="collapsed"
+            aria-expanded="false"><i class="mdi mdi-lead-pencil valueChangerIcon pull-left contactNameIcon"></i></a>
+        </div>
+        <div id="showChangeContactName" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+          <div class="panel-body">
+            <br>
+            <br>
+            <br>
+            <br>
+            <form #registerForm="ngForm" (ngSubmit)="changeContactName()">
+              <div class="col-lg-7">
+                <div class="form-group">
+                  <input type="text" class="form-control customerInfoAttributeForm" required minlength="2"
+                    maxlength="30" [(ngModel)]="model.name" name="ContactName" #name="ngModel">
+                </div>
+              </div>
+              <div class="col-lg-4 pull-right">
+                <button type="button" href="#showChangeContactName" data-toggle="collapse"
+                  class="btn btn-danger editable-cancel btn-sm waves-effect m-r-5"><i
+                    class="mdi mdi-close"></i></button>
+                <button type="submit" class="btn btn-success editable-submit btn-sm waves-effect waves-light"><i
+                    class="mdi mdi-check"></i></button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="modal-body">
+        <br>
+        <br>
+        <div class="table-responsive">
+          <table id="mainTable" class="table table-striped m-b-0">
+            <tbody>
+              <tr>
+                <td>
+                  Role:
+                </td>
+                <td>
+                  {{contact.role}}
+                  <a *ngIf="!contact.masked" id="contactRole" data-toggle="collapse" href="#showChangeContactRole"
+                    class="collapsed" aria-expanded="false"><i
+                      class="mdi mdi-lead-pencil valueChangerIcon m-l-15"></i></a>
+                  <div id="showChangeContactRole" class="panel-collapse collapse" aria-expanded="false"
+                    style="height: 0px;">
+                    <div class="panel-body">
+                      <form #registerForm="ngForm" (ngSubmit)="changeContactRole()">
+                        <div class="col-lg-7">
+                          <div class="form-group">
+                            <input type="text" class="form-control customerInfoAttributeForm" required minlength="2"
+                              maxlength="30" [(ngModel)]="model.role" name="ContactRole" #name="ngModel">
+                          </div>
+                        </div>
+                        <div class="col-lg-4 pull-right">
+                          <button type="button" href="#showChangeContactRole" data-toggle="collapse"
+                            class="btn btn-danger editable-cancel btn-sm waves-effect m-r-5"><i
+                              class="mdi mdi-close"></i></button>
+                          <button type="submit"
+                            class="btn btn-success editable-submit btn-sm waves-effect waves-light"><i
+                              class="mdi mdi-check"></i></button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr *ngIf="!contact.masked">
+                <td>
+                  Mail:
+                </td>
+                <td>
+                  {{contact.mail}}
+                  <a id="contactMail" data-toggle="collapse" href="#showChangeContactMail" class="collapsed"
+                    aria-expanded="false"><i class="mdi mdi-lead-pencil valueChangerIcon m-l-15"></i></a>
+                  <div id="showChangeContactMail" class="panel-collapse collapse" aria-expanded="false"
+                    style="height: 0px;">
+                    <div class="panel-body">
+                      <form #registerForm="ngForm" (ngSubmit)="changeContactMail()">
+                        <div class="col-lg-7">
+                          <div class="form-group">
+                            <input type="text" class="form-control customerInfoAttributeForm" required minlength="2"
+                              maxlength="30" [(ngModel)]="model.mail" name="ContactMail" #name="ngModel">
+                          </div>
+                        </div>
+                        <div class="col-lg-4 pull-right">
+                          <button type="button" href="#showChangeContactMail" data-toggle="collapse"
+                            class="btn btn-danger editable-cancel btn-sm waves-effect m-r-5"><i
+                              class="mdi mdi-close"></i></button>
+                          <button type="submit"
+                            class="btn btn-success editable-submit btn-sm waves-effect waves-light"><i
+                              class="mdi mdi-check"></i></button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr *ngIf="!contact.masked">
+                <td>
+                  Telephone:
+                </td>
+                <td>
+                  {{contact.telephone}}
+                  <a id="contactTelephone" data-toggle="collapse" href="#showChangeContactTelephone" class="collapsed"
+                    aria-expanded="false"><i class="mdi mdi-lead-pencil valueChangerIcon m-l-15"></i></a>
+                  <div id="showChangeContactTelephone" class="panel-collapse collapse" aria-expanded="false"
+                    style="height: 0px;">
+                    <div class="panel-body">
+                      <form #registerForm="ngForm" (ngSubmit)="changeContactTelephone()">
+                        <div class="col-lg-7">
+                          <div class="form-group">
+                            <input type="text" class="form-control customerInfoAttributeForm" required minlength="2"
+                              maxlength="30" [(ngModel)]="model.telephone" name="ContactTelephone" #name="ngModel">
+                          </div>
+                        </div>
+                        <div class="col-lg-4 pull-right">
+                          <button type="button" href="#showChangeContactTelephone" data-toggle="collapse"
+                            class="btn btn-danger editable-cancel btn-sm waves-effect m-r-5"><i
+                              class="mdi mdi-close"></i></button>
+                          <button type="submit"
+                            class="btn btn-success editable-submit btn-sm waves-effect waves-light"><i
+                              class="mdi mdi-check"></i></button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr *ngIf="!contact.masked">
+                <td>
+                  Responsible:
+                </td>
+                <td>
+                  <div *ngIf="!contact.responsible" class="checkbox checkbox-primary checkbox-single">
+                    <input id="responsible" type="checkbox" (change)="changeResponsibleContact($event)"
+                      [checked]="contact.responsible" value="{{contact.responsible}}">
+                    <label for="responsible"></label>
+                  </div>
+                  <p *ngIf="contact.responsible">Yes</p>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div *ngIf="!contact.masked" class="modal-footer">
+        <button class="btn btn-danger btn-rounded waves-effect waves-light" (click)="maskContactSwal.show()">Mask
+          Contact</button>
+        <swal #maskContactSwal title="Mask confirmation" text="Are you sure you want to mask {{contact.name}}?"
+          type="question" [showCancelButton]="true" [focusCancel]="true" (confirm)="maskContact()">
+        </swal>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade addContact-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+  aria-hidden="true">
+  <!--ADDCONTACT-MODAL-->
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" id="closeAddCustomerModal" class="close" data-dismiss="modal"
+          aria-hidden="true">×</button>
+        <h4 class="modal-title" id="myLargeModalLabel">Add new Contact</h4>
+      </div>
+      <div class="modal-body">
+        <br>
+        <br>
+        <form #registerForm="ngForm" (ngSubmit)="addContact()">
+
+          <div class="form-group col-md-8">
+            <label>Name</label>
+              <input type="text" class="form-control" required minlength="2" maxlength="30" [(ngModel)]="model.name"
+              name="name" #name="ngModel">
+          </div>
+          <div class="form-group col-md-8">
+            <label>Role</label>
+            <input type="text" class="form-control" required minlength="1" maxlength="25" [(ngModel)]="model.role"
+              name="role" #region="ngModel">
+          </div>
+          <div class="form-group col-md-8">
+            <label>Telephone</label>
+            <input type="text" class="form-control" required minlength="5" maxlength="15" [(ngModel)]="model.telephone"
+              name="telephone" #telephone="ngModel">
+          </div>
+          <div class="form-group col-md-8">
+            <label>Mail</label>
+            <input type="text" class="form-control" required minlength="2" maxlength="50" [(ngModel)]="model.mail"
+              name="mail" #customermail="ngModel">
+          </div>
+
+          <br>
+          <br>
+          <br>
+          <div class="row">
+          </div>
+          <div class="modal-footer">
+            <button [disabled]="!registerForm.valid" class="btn btn-primary btn-rounded waves-effect waves-light" type="submit">Add
+              Contact</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

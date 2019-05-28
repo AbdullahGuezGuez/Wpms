@@ -1,0 +1,46 @@
+.btn:hover {
+  background-color: #1EA69A;
+  color: white;
+  }
+
+.circle-text-user {
+  display: table-cell;
+  height: 30px;
+  width: 30px;
+  text-align: center;
+  vertical-align: middle;
+  border-radius: 50%;
+  background: #F7B543;
+  color: #fff;
+  font: 10px "josefin sans", arial;
+}
+
+.button-pos {
+  padding-top: 25px;
+  position: relative;
+}
+.profile-username {
+  margin-left: 0px;
+}
+
+@media only screen and (max-width: 768px) {
+  .button-pos {
+    padding-top: 0px;
+    background-color: rgb(166, 30, 30);
+  }
+  body {
+    background-color: #1EA69A;
+  }
+}
+
+.mobileShow {display: none;} 
+
+  /* Smartphone Portrait and Landscape */ 
+  @media only screen 
+    and (max-width : 768px){ 
+      .mobileShow {display: inline-block;}
+  }
+
+.spinner  {
+  margin-right: 25px;
+}

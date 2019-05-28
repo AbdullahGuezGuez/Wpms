@@ -1,0 +1,261 @@
+<div class="container" *ngIf="_authService.loggedIn()">
+  <div class="col-md-12">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="col-md-2 col-lg-1 col-sm-2 col-xs-3">
+          <div class="media-main">
+            <a class="pull-left">
+              <div *ngIf="project?.priority < 4" class="circle-text-priority1-3 collapsed" data-toggle="collapse" href="#showChangeProjectPriority"
+                aria-expanded="false" id="projectPriority">
+                {{ project?.priority }}</div>
+                <div *ngIf="project?.priority < 7 && project?.priority > 3" class="circle-text-priority4-6 collapsed" data-toggle="collapse" href="#showChangeProjectPriority"
+                aria-expanded="false" id="projectPriority">
+                {{ project?.priority }}</div>
+                <div *ngIf="project?.priority < 10 && project?.priority > 6" class="circle-text-priority7-9 collapsed" data-toggle="collapse" href="#showChangeProjectPriority"
+                aria-expanded="false" id="projectPriority">
+                {{ project?.priority }}</div>
+                <div *ngIf="project?.priority > 10" class="circle-text-priority10 collapsed" data-toggle="collapse" href="#showChangeProjectPriority"
+                aria-expanded="false" id="projectPriority">
+                {{ project?.priority }}</div>
+            </a>
+          </div>
+        </div>
+        <div class="col-md-4 col-sm-5 col-xs-7 pull-left">
+          <!--namn-->
+          <div class="info">
+            <h1 class="m-l-10" style="display:inline;">{{project?.name}}</h1>
+            <br>
+            <h3 *ngIf="!active" class="text-muted m-l-15">Archived</h3>
+            <h3 *ngIf="active" class="text-muted m-l-15">Active</h3>
+          </div>
+        </div>
+        <div class="col-md-2 col-xs-2 pull-right">
+          <!--settings-->
+          <a type="button" routerLink="/projects" class="btn waves-effect btn-default m-t-5 btn-lg pull-right"><i
+              class="glyphicon glyphicon-remove"></i> </a>
+            <a *ngIf="active && !waiter" (click)="changeProjectStatus()" type="button" class="btn waves-effect btn-default m-t-5 m-r-15 btn-lg pull-right" data-toggle="tooltip" data-placement="top" title="Archive this project"><i class="glyphicon glyphicon-folder-close"></i></a>
+            <a *ngIf="!active && !waiter" (click)="changeProjectStatus()" type="button" class="btn waves-effect btn-default m-t-5 m-r-15 btn-lg pull-right" data-toggle="tooltip" data-placement="top" title="Reactivate this project"><i class="glyphicon glyphicon-folder-open"></i></a>
+            <a *ngIf="waiter" type="button" class="btn waves-effect btn-default m-t-5 m-r-15 btn-lg pull-right"><mat-spinner [diameter]="20"></mat-spinner></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="row no-gutters m-t-5">
+      <div id="showChangeProjectPriority" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+        <form #activityForm="ngForm" (ngSubmit)="changePriority(activityForm.value)">
+          <div class="col-lg-1">
+            <div class="form-group">
+              <select type="text" class="form-control projectInfoAttributeForm" ngModel name="NewPrio"
+                #name="ngModel">
+                <option *ngFor="let project of projects" [value]="project?.priority" >{{project?.priority}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-lg-3 pull-left">
+            <button id="closePrioChange" type="button" href="#showChangeProjectPriority" data-toggle="collapse"
+              class="btn btn-danger editable-cancel btn-sm waves-effect m-r-5">
+              <i class="mdi mdi-close"></i>
+            </button>
+            <button type="submit" class="btn btn-success editable-submit btn-sm waves-effect waves-light">
+              <i class="mdi mdi-check"></i>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="row m-t-10">
+      <div class="col-md-2 col-lg-2 pull-right">
+        <div class="panel panel-primary">
+          <div class="panel-body">
+            <h4>Projects <i class="mdi mdi-information-outline m-r-15" data-toggle="tooltip"
+              data-placement="top" title="The list does only show top 15 prioritized projects"></i></h4>
+            <div class="col-xs-12">
+              <table class="table table-hover">
+                <tbody>
+                  <tr *ngFor="let p of projects | slice:0:15; let i=index">
+                    <td (click)="getOneProject(p.id)" routerLink="/project/{{p.id}}" [ngClass]="{ 'unactive': !toggle}">
+                      {{p.name}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-10">
+        <div class="row">
+          <app-graph [projectId]="id"></app-graph>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="panel panel-body">
+              <div class="form-group">
+                <h4 class="col-md-2 control-label">Trello Tasks</h4>
+                <div class="col-md-10">
+                  <select type="text" class="form-control m-t-5" (change)="getUserTasks($event)">
+                    <option *ngFor="let list of boardLists" [value]="list?.id">
+                      {{list?.name}}
+                    </option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-sm-2" *ngFor="let user of userTaskList">
+                  <div class="panel borderCard">
+                    <div class="panel-body user-card">
+                      <div class="media-main">
+                        <div class="info">
+                          <h4>{{user.userName}}
+                          </h4>
+                        </div>
+                      </div>
+                      <div class="clearfix"></div>
+
+                      <p class="text-muted info-text">
+                        Tasks </p>
+                      <hr>
+                      <div *ngFor="let item of user.cardNames.slice(0,3)">
+                        <p>{{item}}</p>
+                        <hr>
+                      </div>
+
+                      <button type="button" class="btn btn-primary waves-effect waves-light" data-toggle="modal"
+                        data-target="#myModal" (click)=getTargetedUserTasks(user)>Check
+                        All Tasks</button>
+                      <br><br>
+                    </div> <!-- panel-body -->
+                  </div>
+                </div>
+              </div> <!-- end row -->
+            </div>
+          </div><!-- container -->
+        </div>
+
+
+        <!-- Users och deras Tasks  -->
+        <div class="row">
+          <div class="col-md-6">
+            <div class="panel">
+              <div class="panel-body">
+                <div class="container">
+                  <div class="row">
+                    <h4 class="m-t-15" style="display:inline;">{{project?.name}} Members</h4>
+                    <a style="display:inline;" type="button"  data-toggle="modal"
+                    data-target=".user-modal" class="btn waves-effect btn-default m-t-5 m-b-10 m-r-15 btn-lg pull-right"><i data-toggle="tooltip"
+                      data-placement="top" title="Add Members to project" class="mdi mdi-account-switch"></i>
+                  </a>
+                  <br>
+                      <table class="table table-striped m-t-10">
+                        <tr *ngFor="let item of usersToProject">
+                          <td>
+                             {{item.fullName}}
+                          </td>
+                        </tr>
+                      </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="panel">
+              <div class="panel-body">
+                <div class="row">
+                  <div class="col-md-10">
+                    <h4 style="display:inline;" class="pull-left">
+                      {{ project?.name }}</h4>
+                  </div>
+                  <div class="col-md-2">
+                    <h4 style="display:inline;" class="pull-right" data-toggle="tooltip" data-placement="top" title="Projektets prioritet">
+                      {{ project?.priority }}</h4>
+                  </div>
+                </div>
+                <br>
+                <div class="row">
+                  <div class="col-md-12">
+                    <p>{{ project?.description }}</p>
+                  </div>
+                </div>
+                <div class="row no-gutters">
+                  <hr>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <p>Start date:
+                      {{ project?.startDate | date: "yyyy-MM-dd" }}
+                    </p>
+                  </div>
+                  <div class="col-md-6">
+                    <p>End date:
+                      {{ project?.endDate | date: "yyyy-MM-dd" }}
+                    </p>
+                  </div>
+                </div>
+                <p>Projects budget: {{ project?.totalBudget }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--modals-->
+<div class="modal fade user-modal" tabindex="-1" user="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3>Assign users to {{project?.name}}</h3>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="col-md-6">
+              <div class="panel panel-deafult">
+                <div class="panel-heading">
+                  <h3 class="panel-title">Available</h3>
+                </div>
+                <div class="panel-body">
+                  <div class="example-container">
+                    <div cdkDropList #usersAvailable="cdkDropList" [cdkDropListData]="users"
+                      [cdkDropListConnectedTo]="[usersToAdd]" class="example-list" (cdkDropListDropped)="drop($event)">
+                      <div class="example-box" *ngFor="let user of users" cdkDrag>
+                        {{user.userName}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="panel panel-deafult">
+                <div class="panel-heading">
+                  <h3 class="panel-title">Assigned</h3>
+                </div>
+                <div class="panel-body">
+                  <div class="example-container">
+                    <div cdkDropList #usersToAdd="cdkDropList" [cdkDropListData]="usersToProject"
+                      [cdkDropListConnectedTo]="[usersAvailable]" class="example-list"
+                      (cdkDropListDropped)="drop($event)">
+                      <div class="example-box" *ngFor="let item of usersToProject" cdkDrag>
+                        {{item.userName}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary btn-rounded waves-effect waves-light" (click)="addMembersToProject()"
+          data-dismiss="modal" aria-hidden="true">Save</button>
+      </div>
+    </div>
+  </div>
+</div>

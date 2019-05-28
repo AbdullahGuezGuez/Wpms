@@ -1,0 +1,17 @@
+<div class="accountbg"></div>
+<div class="wrapper-page">
+  <div class="panel panel-primary">
+    <div class="panel-body"> <!--Fruktansvärt fult, eventuellt göra om med buttongroup?-->
+      <h3 class="text-muted text-center m-t-0"><b>Choose Organization</b></h3>
+      <table class="table">
+        <thead>
+          <th *ngFor="let Organization of organizations">
+            <button class="btn btn-lg waves-effect waves-light" (click)="loginWithOrg(Organization.id)">{{Organization.name}}</button>
+
+          </th>
+        </thead>
+      </table>
+
+    </div>
+  </div>
+</div>

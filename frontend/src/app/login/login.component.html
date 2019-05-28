@@ -1,0 +1,61 @@
+<div *ngIf="loggedIn() && !showChooseOrg">
+  <div class="accountbg"></div>
+  <div class="wrapper-page">
+    <div class="panel panel-color panel-primary panel-pages">
+
+      <div class="panel-body">
+        <h3 class="text-center m-t-0 m-b-15">
+          <span>WPMS</span>
+        </h3>
+        <h4 class="text-muted text-center m-t-0"><b>Sign In</b></h4>
+
+        <form #loginForm="ngForm" class="form-horizontal m-t-20" (ngSubmit)="firstLogin()">
+
+          <div class="form-group">
+            <div class="col-xs-12">
+              <input class="form-control" type="text" name="username" placeholder="Username" required minlength="2"
+                maxlength="16" [(ngModel)]="model.username" #username="ngModel">
+
+              <div *ngIf="username.errors && (username.dirty || username.touched)" class="alert alert-danger">
+                <div [hidden]="!username.errors.required">
+                  username is required!
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="col-xs-12">
+              <input type="password" class="form-control" required maxlength="10" minlength="4" name="password"
+                [(ngModel)]="model.password" placeholder="Password" #password="ngModel">
+
+              <div *ngIf="password.errors && (password.dirty || password.touched)" class="alert alert-danger">
+
+                <div [hidden]="!password.errors.required">
+                  Password is required! and max 10 characters.
+                </div>
+                <div [hidden]="!password.errors.minlength">
+                  Password must be at least 4 characters long.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group text-center m-t-40">
+            <div class="col-xs-12">
+              <button [disabled]="!loginForm.valid" class="btn btn-primary btn-block btn-lg waves-effect waves-light"
+                type="submit">Log In</button>
+            </div>
+          </div>
+
+          <div>
+            <b>{{errorText}}</b>
+          </div>
+
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<app-chooseorg *ngIf="showChooseOrg" [userDetails]="model"></app-chooseorg>

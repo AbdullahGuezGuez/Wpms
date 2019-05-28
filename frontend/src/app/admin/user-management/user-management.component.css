@@ -1,0 +1,32 @@
+.btn {
+    margin-left: 7px;
+}
+
+.circle-text-user {
+    display: table-cell;
+    height: 65px;
+    width: 65px;
+    text-align: center;
+    padding-top: 18px;
+    vertical-align: middle;
+    border-radius: 50%;
+    background: #F7B543;
+    color: #fff;
+    font: 25px "josefin sans", arial;
+}
+
+.hover:hover, .example-card:focus {
+    background-color: lightgray;
+    box-shadow: 0 0.3em 0.3em -0.2em var(--hover);
+    transform: translateY(-0.15em); 
+}
+input[type=text] {
+    padding:5px; 
+    border:2px solid #ccc; 
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+}
+
+input[type=text]:focus {
+    border-color:#00FF00;
+}

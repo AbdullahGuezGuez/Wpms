@@ -1,0 +1,319 @@
+<div class="row" *ngIf="_authService.loggedIn()">
+  <div class="col-md-12">
+    <div class="container">
+      <div class="panel panel-primary">
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-md-3">
+              <div *ngIf="url == '/allactivities'">
+                <h2>All Activities</h2>
+              </div>
+              <div *ngIf="url == '/todos'">
+                <h2>Todos</h2>
+              </div>
+            </div>
+            <div class="col-md-9 pull-right">
+              <!--Kolla ifall om på todo eller på activities-->
+
+              <div *ngIf="url == '/allactivities'">
+                <div *ngIf="!showArchived">
+                  <button class="btn btn-default btn-rounded pull-right" (click)="GetArchivedActivities()">Show
+                    Archived</button>
+                </div>
+                <div *ngIf="showArchived">
+                  <button class="btn btn-default btn-rounded pull-right" (click)="GetAllActivities()">Hide
+                    Archived</button>
+                </div>
+              </div>
+              <div *ngIf="url == '/todos'">
+                <div *ngIf="!showChecked">
+                  <button class="btn btn-default btn-rounded pull-right" (click)="GetCheckedTodos()">Show
+                    Checked</button>
+                </div>
+                <div *ngIf="showChecked">
+                  <button class="btn btn-default btn-rounded pull-right" (click)="GetAllActivities()">Hide
+                    Checked</button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <div fxLayout fxLayoutAlign="left" class="m-l-30">
+                <mat-form-field fxFlex="32%">
+                  <input matInput type="text" (keyup)="doFilter($event.target.value)" placeholder="Filter">
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+          <table mat-table class="table-hover max-width" [dataSource]="dataSource" matSort matSortActive="date"
+            matSortDirection="asc">
+            <ng-container matColumnDef="date">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header style="font-size: 15px;">Date</th>
+              <td mat-cell *matCellDef="let element">
+                <div class="container container-activity" data-toggle="modal" data-target=".showActivity-modal"
+                  (click)="activityClick(element.id)">
+                  <div #then>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6 col-lg-6 col-sm-12">
+                      <div class="panel panel-default">
+                        <div class="panel-heading">
+                          <div class="row">
+                            <div class="col-lg-2 col-md-12">
+                              <h3>Result</h3>
+                            </div>
+                            <div class=" col-lg-6 col-md-12 col-sm-10">
+                              <div class="initials-top">
+                                <div class="circle-text-user" *ngFor="let user of element.businessParticipants">
+                                  {{user.initials}}
+                                </div>
+                                <div class="circle-text-customer"
+                                  *ngFor="let contactperson of element.customerParticipiants">
+                                  {{contactperson.initials}}
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-lg-4 col-md-12 date">
+                              <p class="pull-right">{{element.date | date: "yyyy-MM-dd HH:mm"}}</p>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="panel-body activity-card">
+                          <div class="row">
+                            <div class="col-lg-2 col-md-3 col-sm-3">
+                              <table>
+                                <tbody class="tr-big">
+                                  <tr>{{element.title}}</tr>
+                                  <tr>{{element.type}}</tr>
+                                  <tr>{{element.creator}}</tr>
+                                </tbody>
+                              </table>
+                            </div>
+                            <div class="col-lg-10 col-md-9 col-sm-9">
+                              <table>
+                                <tbody>
+                                  <tr>
+                                    <p class="no-overflow">
+                                      {{element.description}}
+                                    </p>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-6 col-sm-12">
+                      <div class="panel panel-default">
+                        <div class="panel-heading">
+                          <div class="row">
+                            <div class="col-md-2">
+                              <h3>Next</h3>
+                            </div>
+                            <div class=" col-lg-6 col-md-12 col-sm-10">
+                              <div class="initials-top">
+                                <div class="circle-text-user" *ngFor="let user of element.nextStepBusinessParticipants">
+                                  {{user.initials}}
+                                </div>
+                                <div class="circle-text-customer"
+                                  *ngFor="let contactperson of element.nextStepCustomerParticipiants">
+                                  {{contactperson.initials}}
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-md-12 col-lg-4 date">
+                              <p class="pull-right">{{element.nextStepDate | date: "yyyy-MM-dd HH:mm"}}</p>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="panel-body activity-card">
+                          <div *ngIf="element.nextStepTitle === null && element.nextStepCreator === null && url == '/allactivities'">
+                            <h4>No next step found for this activity</h4>
+                          </div>
+                          <div class="row">
+                            <div class="col-lg-2 col-md-3 col-sm-3">
+                              <table>
+                                <tbody class="tr-big">
+                                  <tr>{{element.nextStepTitle}}</tr>
+                                  <tr>{{element.nextStepType}}</tr>
+                                  <tr>{{element.nextStepCreator}}</tr>
+                                </tbody>
+                              </table>
+                            </div>
+                            <div class="col-lg-10 col-md-9 col-sm-9">
+                              <table>
+                                <tbody>
+                                  <tr>
+                                    <p class="no-overflow">
+                                      {{element.nextStepDescription}}
+                                    </p>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+
+          <div *ngIf="noData | async" class="no-records"> <!--Todo fixa beroende på url-->
+            No activities found for organization
+          </div>
+          <mat-paginator [pageSizeOptions]="[10, 25, 50, 100, 250]" showFirstLastButtons></mat-paginator>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade showActivity-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+    aria-hidden="true">
+    <!--If on allactivity view-->
+    <div *ngIf="url == '/allactivities'" class="modal-dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <div class="row">
+              <div class="col-md-4">
+                <h4 class="modal-title" id="myLargeModalLabel">Activity summary</h4>
+              </div>
+              <div class="col-md-7">
+                <div *ngIf="!activity.archived">
+                  <button class="close pull-right" style="font-size: 14px; margin-top: 3px;"
+                    (click)="archiveActivity(activity.id)" data-dismiss="modal" aria-hidden="true">Archive
+                    <i class="glyphicon glyphicon-folder-close" style="margin-left: 5px;"></i></button>
+                </div>
+                <div *ngIf="activity.archived">
+                  <button class="close pull-right" style="font-size: 14px; margin-top: 3px;"
+                    (click)="unArchiveActivity(activity.id)" data-dismiss="modal" aria-hidden="true">Unarchive
+                    <i class="glyphicon glyphicon-folder-open" style="margin-left: 5px;"></i></button>
+                </div>
+              </div>
+              <div class="col-md-1 text-center">
+                <button type="button" id="closeActivityModal" class="close" data-dismiss="modal"
+                  aria-hidden="true">×</button>
+              </div>
+            </div>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-md-6">
+                <h3>Result</h3>
+                <h4>{{activity.title}}</h4>
+                <p>{{activity.date | date: "yyyy-MM-dd HH:mm"}}</p>
+                <p>{{activity.creator}}</p>
+              </div>
+              <div class="col-md-6">
+                <h3>Next Step</h3>
+                <div *ngIf="activity.nextStepTitle === null">
+                  <a data-dismiss="modal" aria-hidden="true" (click)="createNextStep(activity.id)">Lägg till
+                    nextstep</a>
+                </div>
+                <div *ngIf="activity.nextStepTitle != null">
+                  <h4>{{activity.nextStepTitle}}</h4>
+                </div>
+
+                <p>{{activity.nextStepDate | date: "yyyy-MM-dd HH:mm"}}</p>
+                <p>{{activity.nextStepCreator}}</p>
+              </div>
+            </div>
+            <div class="row">
+              <h4 class="text-center" style="background-color: #F1F1F2;">Businessparticipants</h4>
+              <div class="col-md-6">
+                <div *ngFor="let item of activity.businessParticipants">
+                  <p>{{item.fullName}}</p>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div *ngFor="let item of activity.nextStepBusinessParticipants">
+                  <p>{{item.fullName}}</p>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <h4 class="text-center" style="background-color: #F1F1F2;">Customerparticipants</h4>
+              <div class="col-md-6">
+                <div *ngFor="let item of activity.customerParticipiants">
+                  <p>{{item.name}}</p>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div *ngFor="let item of activity.nextStepCustomerParticipiants">
+                  <p>{{item.name}}</p>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <h4 class="text-center" style="background-color: #F1F1F2;">Descriptions</h4>
+              <div class="col-md-6">
+                <p>{{activity.description}}</p>
+              </div>
+              <div class="v1"></div>
+              <div class="col-md-6">
+                <p>{{activity.nextStepDescription}}</p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="pull-left"><i class="ti-angle-left" (click)="leftClick()"></i></div>
+              <div class="pull-right"><i class="ti-angle-right" (click)="rightClick()"></i></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--If on todo view-->
+    <div *ngIf="url == '/todos'">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <div class="row no-gutters">
+              <div class="col-md-8 pull-left">
+                <h4 class="modal-title" id="myLargeModalLabel" style="display: inline;">Todo summary</h4>
+              </div>
+              <div class="col-md-3">
+                <div *ngIf="!activity.todoChecked">
+                    <button class="close pull-right" style="font-size: 15px; margin-top: 3px;"
+                    (click)="markTodoDone(activity.id)" data-dismiss="modal" aria-hidden="true">Done
+                    <i class="mdi mdi-checkbox-marked-outline" style="margin-left: 5px;"></i></button>
+                </div>
+                <div *ngIf="activity.todoChecked">
+                    <button class="close pull-right" style="font-size: 15px; margin-top: 3px;"
+                    (click)="markTodoNotDone(activity.id)" data-dismiss="modal" aria-hidden="true">Not Done
+                    <i class="mdi mdi-checkbox-blank-outline" style="margin-left: 5px;"></i></button>
+                </div>
+              </div>
+              <div class="col-md-1">
+              <button type="button" id="closeActivityModal" class="close" data-dismiss="modal" aria-hidden="true"
+              style="display: inline;">×</button>
+              </div>
+            </div>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-md-5">
+                <h4>{{activity.title}}</h4>
+                <p>{{activity.date | date: "yyyy-MM-dd HH:mm"}}</p>
+                <p>{{activity.creator}}</p>
+              </div>
+              <div class="col-md-7">
+                <p>{{activity.description}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--ShowActivity modal END-->

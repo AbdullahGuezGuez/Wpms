@@ -1,0 +1,92 @@
+.date {
+    margin-top: 8px;
+    font-size: 13px;
+    padding-left: 0px;
+}
+
+tr {
+    color: #333333;
+}
+
+.tr-big {
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.panel-default {
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
+.panel-heading {
+    padding: 10px 10px;
+}
+
+.activity-card {
+    max-height: 140px; 
+    min-height: 120px; /* Test från att ha fast height på 140px */
+    width: 100%;
+    padding: 10px;
+}
+
+.createActivity-modal {
+    position: absolute;
+    z-index: 5000;
+}
+
+.no-overflow {
+    margin-left: 20px;
+}
+
+.max-width {
+    width: 100%;
+}
+
+.row-no-padding {
+    padding: 0px;
+    margin: 0px;
+}
+
+.no-overflow {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    line-height: 18px;
+    max-height: 70px;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+}
+
+.p {
+    position: absolute;
+}
+
+.initials-top {
+    margin-top: 7px;
+    overflow: hidden;
+    width: 100%;
+}
+
+.circle-text-user {
+    display: table-cell;
+    height: 38px;
+    width: 38px;
+    text-align: center;
+    vertical-align: middle;
+    border-radius: 50%;
+    background: #F7B543;
+    color: #fff;
+    font: 11px "josefin sans", arial;
+}
+
+.circle-text-customer {
+    display: table-cell;
+    height: 38px; 
+    width: 38px;
+    text-align: center;
+    vertical-align: middle;
+    border-radius: 50%;
+    background: #03909F;
+    color: #fff;
+    font: 11px "josefin sans", arial;
+}

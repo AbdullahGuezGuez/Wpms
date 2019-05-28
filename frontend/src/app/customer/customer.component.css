@@ -1,0 +1,60 @@
+.circle {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  height: 0;
+  padding: 50% 0%;
+  border-radius: 50%;
+  background: #000;
+  color: white;
+  font-family: "josefin sans", Arial Black, sans;
+  font-size: 20px;
+  text-align: center;
+}
+
+.circle-text {
+  display: table-cell;
+  height: 65px;
+  width: 65px;
+  text-align: center;
+  padding-top: 18px;
+  vertical-align: middle;
+  border-radius: 50%;
+  background: rgb(95, 114, 136);
+  color: #fff;
+  font: 25px "josefin sans", arial;
+}
+
+.circle-text-responsible {
+  display: table-cell;
+  height: 65px;
+  width: 65px;
+  text-align: center;
+  padding-top: 18px;
+  vertical-align: middle;
+  border-radius: 50%;
+  background: #03909F;
+  color: #fff;
+  font: 25px "josefin sans", arial; 
+}
+
+.table-hover {
+  width: 100%
+}
+
+#contactCard {
+  width: 100%;  
+  cursor: pointer;
+}
+
+.contactNameIcon {
+  margin-top: 32px
+}
+
+.valueChangerIcon {
+  color: rgb(139, 139, 139);
+}
+
+.customerInfoAttributeForm {
+  border-bottom: 1px darkgray solid;
+}

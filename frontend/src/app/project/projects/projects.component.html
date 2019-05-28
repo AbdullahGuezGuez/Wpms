@@ -1,0 +1,199 @@
+<div class="row" *ngIf="_authService.loggedIn()">
+  <div class="container">
+    <div class="col-md-12">
+      <h2 class="m-b-30 m-t-0 m-l-10">Projects </h2>
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="panel panel-primary">
+          <br>
+          <div class="col-md-10">
+            <div fxLayout fxLayoutAlign="left" class="m-l-15">
+              <mat-form-field fxFlex="40%">
+                <input matInput type="text" (keyup)="doFilter($event.target.value)" placeholder="Filter">
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-md-2 pull-right">
+            <a type="button" data-toggle="modal" data-target=".addProject-modal"
+              class="btn waves-effect btn-default m-t-5 m-r-15 btn-lg pull-right"><i class="mdi mdi-chart-line"></i></a>
+            <a *ngIf="showActive && !waiter" (click)="getAllArchivedProjects()" type="button" class="btn waves-effect btn-default m-t-5 m-r-15 btn-lg pull-right" data-toggle="tooltip" data-placement="top" title="Show Archived Projects"><i class="glyphicon glyphicon-folder-close"></i></a>
+            <a *ngIf="!showActive && !waiter" (click)="getAllUnarchivedProjects()" type="button" class="btn waves-effect btn-default m-t-5 m-r-15 btn-lg pull-right" data-toggle="tooltip" data-placement="top" title="Show Active Projects"><i class="glyphicon glyphicon-folder-open"></i></a>
+            <a *ngIf="waiter" type="button" class="btn waves-effect btn-default m-t-5 m-r-15 btn-lg pull-right"><mat-spinner [diameter]="20"></mat-spinner></a>
+          </div>
+
+          <table mat-table class="table" [dataSource]="dataSource" matSort matSortActive="priority"
+            matSortDirection="asc">
+            <div class="container">
+              <ng-container matColumnDef="priority">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header style="font-size:14px;"> Priority</th>
+                <td mat-cell *matCellDef="let element" style="text-align:right;">
+
+                  <div style="cursor:pointer" (click)="selectedProject(element.id)">
+                    <div class="row">
+                      <div class="col-md-4">
+                        <h3 class="pull-left">{{element.name}}</h3>
+                      </div>
+                      <div class="col-md-6">
+
+                      </div>
+                      <div class="col-md-2 pull-right">
+                        <h4 class="priority">{{element.priority}}</h4>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class=" col-lg-6 col-md-12 col-xs-12">
+                        <div class="row no-gutters">
+                          <h4 class="pull-left" style="padding-left: 10px;">Hours left of total budget: {{element.estimatedTimeOver * -1}}</h4>
+                        </div>
+                        
+                        
+                        <!-- <p data-toggle="tooltip" data-placement="top" title="Used Time / Estimated Time">
+                          <ngb-progressbar type="success" [value]="element.usedTime" [max]="element.estimatedTime"height="1.75rem">
+                          </ngb-progressbar >
+                        </p> -->
+                        <div *ngIf="element.estimatedTime <= element?.totalBudget ">
+                          <div class="progress" data-toggle="tooltip" data-placement="top" title="Used Time / Estimated Time / Budget time ">
+                            <div class="progress-bar usedTime" role="progressbar"  [ngStyle]="{width:element.usedTime/element?.totalBudget | percent:'1.0-1'}"></div>
+                           <div class="progress-bar estimated" role="progressbar" [ngStyle]="{width:element.estimatedTime/element?.totalBudget| percent:'1.0-1'}"></div>
+                        </div>
+                        </div>
+                        
+
+                        <div *ngIf="element.estimatedTime > element?.totalBudget ">
+                          <div class="warning" data-toggle="tooltip" data-placement="top" title="Estimated Time Is Over Budget Time">
+                              <span class="fa fa-warning " style="font-size:25px;color:red"></span>
+                              <ngb-progressbar type="danger" [value]="element.estimatedTimeOver" [max]="element.estimatedTime"height="1.75rem"><p class="inside">{{element.estimatedTimeOver}}</p>
+                              </ngb-progressbar>
+                            </div>
+                          </div>
+
+                      </div>
+                      <div class="col-lg-2 col-md-4 col-xs-4 text-center">
+                        <h4>Start date</h4>
+                        <p>{{element?.startDate | date: "yyyy-MM-dd"}}</p>
+                      </div>
+
+                      <div class="col-lg-2 col-md-4 col-xs-4 text-center">
+                        <h4>Deadline</h4>
+                        <p>{{element?.endDate | date: "yyyy-MM-dd"}}</p>
+                      </div>
+                      <div class="col-lg-2 col-md-4 col-xs-4 text-center">
+                        <h4>Customer</h4>
+                        <p>{{element.customerName }}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-9">
+                      <h4 class="pull-left">Medverkande: <small style="overflow: hidden;">{{ element.allMembers }}</small></h4>
+                    </div>
+                    <div class="col-md-3">
+                      <button mat-raised-button color="" style="background-color: #5CB45B; color: white;" (click)="goToTrelloBoard(element.trelloUrl)">Trello</button>
+                      <button mat-raised-button color="" style="background-color: #2286F5; color: white;" (click)="goToToggl(element.togglUrl)">Toggl</button>
+                    </div>
+                  </div>
+                </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </div>
+          </table>
+          <div *ngIf="noData | async" class="no-records">
+            No projects found
+          </div>
+          <mat-paginator [pageSizeOptions]="[25, 50, 100, 250]" showFirstLastButtons></mat-paginator>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+<div class="modal fade addProject-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button id="closeProjectModal" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+      </div>
+      <div class="panel-body">
+          <h2 class="m-t-0 m-b-30">Create new project</h2>
+          <form #projectForm="ngForm" class="form-horizontal" name="projectForm">
+            <div class="form-group">
+              <div class="col-md-10"><label>Name</label>
+                <input type="text" required minlength="2" maxlength="25" class="form-control" [(ngModel)]="project.Name" name="projectName">
+              </div>
+            </div>
+            <div class="checkbox checkbox-primary checkbox-single">
+              <input type="checkbox" id="singleCheckbox2" value="option2" (change)="toggleTrello()"
+                aria-label="Single checkbox Two">
+              <label><b>Include Trello</b></label>
+            </div>
+            <br>
+            <div class="form-group">
+              <div class="col-md-10">
+                <label>Board name</label>
+                <input type="text" required minlength="2" maxlength="35" [disabled]="includeTrello" class="form-control" [(ngModel)]="project.TrelloBoardName"
+                  name="trelloboard">
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-md-10"><label>Customer</label>
+                <select type="text" class="form-control" [(ngModel)]="project.CustomerId" name="customer" #customer="ngModel"
+                  (change)="getAllContactsForSelectedCustomer($event.target.value)">
+                  <option *ngFor="let customer of customers" [value]="customer?.id">{{customer?.name}}</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-md-10"><label>Contactperson</label>
+                <select type="text" class="form-control" [(ngModel)]="project.ResponsibleContactpersonId" name="contactPerson"
+                  #customer="ngModel">
+                  <option *ngFor="let contact of contacts" [value]="contact?.id">{{contact?.name}}</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-md-10"><label>Project Responsible</label>
+                <select type="text" class="form-control" [(ngModel)]="project.ResponsibleUserId" name="projectResponsible"
+                  #customer="ngModel">
+                  <option *ngFor="let user of users" [value]="user.id">{{user.userName}}</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-md-10"><label>Start Date</label>
+                <input type="text" class="form-control" #dp="bsDatepicker" bsDatepicker [(bsValue)]="project.StartDate"
+                  value="{{ project.StartDate | date:'yyyy-MM-dd' }}" name="startDate">
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-md-10"> <label>Deadline</label>
+                <input type="text" class="form-control" #dp="bsDatepicker" bsDatepicker [(bsValue)]="project.EndDate"
+                  value="{{ project.EndDate | date:'yyyy-MM-dd' }}" name="deadline">
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-md-10"><label>Total Budget</label>
+                <input type="text" class="form-control" [(ngModel)]="project.TotalBudget" name="TotalBudget">
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-md-10"><label>Project description</label>
+                <textarea class="form-control" required minlength="0" maxlength="5000" rows="5" style="resize: none;" [(ngModel)]="project.Description"
+                  name="projectDescription"></textarea>
+              </div>
+            </div>
+            <swal #createProjectSwal title="Create Project confirmation" text="Are you sure you want to create {{project.name}}"
+              type="question" [showCancelButton]="true" [focusCancel]="true" (confirm)="createProject()">
+            </swal>
+            <button [disabled]="!projectForm.valid" class="btn-primary btn-lg btn-block" (click)="createProjectSwal.show()"> Create Project </button>
+          </form>
+        </div>
+    </div>
+  </div>
+</div>

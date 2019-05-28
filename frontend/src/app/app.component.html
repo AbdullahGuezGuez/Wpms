@@ -1,0 +1,234 @@
+<app-login></app-login>
+<div id="wrapper" class="forced" *ngIf="_authService.loggedIn()">
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="text-center">
+        <a routerLink="home" class="logo"><span>WP</span>MS</a>
+      </div>
+    </div>
+    <div class="navbar navbar-default" role="navigation">
+      <div class="container" style="height:40px">
+        <div class="">
+          <div class="pull-left">
+            <button type="button" class="mobileShow button-menu-mobile open-left waves-effect waves-light"
+              onclick="hamburger()">
+              <i class="ion-navicon"></i>
+            </button>
+            <button *ngIf="!isSystemAdmin" type="button" class="mobileShow button-menu-mobile open-left waves-effect waves-light"
+              (click)="goToCreateNewActivity()">
+              <i class="mdi mdi-comment-plus-outline"></i>
+            </button>
+            <button *ngIf="!isSystemAdmin" type="button" class="mobileShow button-menu-mobile open-left waves-effect waves-light" (click)="refreshTrello()">
+              <i class="mdi mdi-refresh"></i>
+            </button>
+            <span class="clearfix"></span>
+          </div>
+          <ul class="nav navbar-nav navbar-right pull-right">
+
+            <li *ngIf="!isSystemAdmin" class="hidden-xs dropdown">
+              <a class="dropdown-toggle waves-effect waves-light notification-icon-box"
+                data-toggle="dropdown" aria-expanded="true">
+                <i class="mdi mdi-bell-outline"></i> <span *ngIf="notifications?.numberOfTodos <= 5"
+                  class="badge badge-xs badge-primary" >{{ notifications?.numberOfTodos }}</span>
+                  <span *ngIf="notifications?.numberOfTodos > 5 && notifications?.numberOfTodos <= 10"
+                  class="badge badge-xs badge-warning" >{{ notifications?.numberOfTodos }}</span>
+                  <span *ngIf="notifications?.numberOfTodos > 5 && notifications?.numberOfTodos > 10"
+                    class="badge badge-xs badge-danger" >{{ notifications?.numberOfTodos }}</span>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-lg">
+                <div class="row">
+                  <div class="col-sm-2">
+                  </div>
+                  <div class="col-sm-8">
+                    <li class="text-center notifi-title">Notifications</li>
+                  </div>
+                  <div class="col-sm-2" style="padding-top: 12px;">
+                    <li><i class="mdi mdi-refresh" style="font-size: 120%;" (click)="getNotificationsForUser()"></i></li>
+                  </div>
+                </div>
+
+                <li class="list-group">
+                  <!-- A list item-->
+                  <div *ngFor="let activity of notifications?.usersActivities | slice: 0:3;">
+                    <a class="list-group-item" data-toggle="modal" data-target=".showNotifications-modal"
+                      (click)="activityClick(activity?.id)">
+                      <div class="media">
+                        <i class="ti-check-box text-primary noti-sm-icon"></i>
+                        <div class="noti-content">
+                          <div class="media-heading">{{activity?.title}}</div>
+                          <div *ngIf="activity.delayed">
+                            <p class="m-0">
+                              <small style="color: red;">{{activity?.date | date: "yyyy-MM-dd"}}</small>
+                            </p>
+                          </div>
+                          <div *ngIf="!activity.delayed">
+                            <p class="m-0">
+                              <small>{{activity?.date | date: "yyyy-MM-dd"}}</small>
+                            </p>
+                          </div>
+                          <p class="m-0">
+                            <small>{{activity?.description}}</small>
+                          </p>
+                        </div>
+                      </div>
+                    </a>
+                  </div>
+                  <!-- last list item -->
+                  <a [routerLink]="['/todos']" class="list-group-item">
+                    <small class="text-primary">See Your Todos</small>
+                  </a>
+                </li>
+              </ul>
+            </li>
+            <li *ngIf="!isSystemAdmin" class="hidden-xs button-pos">
+              <a data-toggle="tooltip" data-placement="top" style="cursor:pointer" title="Add Activity" (click)="goToCreateNewActivity()"><i
+                  class="mdi mdi-comment-plus-outline"></i></a>
+            </li>
+            <li *ngIf="!updatingTrello" class="hidden-xs button-pos">
+              <a data-toggle="tooltip" data-placement="top" style="cursor:pointer" title="Refresh Trellodata" (click)="refreshTrello()"><i
+                  class="mdi mdi-refresh m-r-10"></i></a>
+            </li>
+            <li *ngIf="updatingTrello" class="hidden-xs button-pos">
+              <mat-spinner [diameter]="20" class="m-l-15 m-r-15 spinner" data-toggle="tooltip" data-placement="top" style="cursor:pointer" title="Refreshing Trellodata..."></mat-spinner>
+            </li>
+            <li class="hidden-xs" style="padding-top: 20px;">
+              <span class="circle-text-user">
+                {{ loggedInUser.initials }}
+              </span>
+            </li>
+            <li class="dropdown">
+              <a class="dropdown-toggle profile waves-effect waves-light" data-toggle="dropdown" aria-expanded="true">
+                <span class="profile-username">
+                  <b>{{ loggedInUser.userName }}</b> <span class="caret"></span>
+                </span>
+              </a>
+              <ul class="dropdown-menu">
+                <li *ngIf="!isSystemAdmin">
+                  <a data-toggle="modal" data-target=".organization-modal" (click)="showOrganizations()">Switch
+                    Organization</a>
+                </li>
+                <li>
+                  <a data-toggle="modal" data-target=".changepassword-modal" (click)="showOrganizations()">Change
+                    Password</a>
+                </li>
+                <li><a (click)="signOut()"> Logout</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="left side-menu" style="position: fixed;">
+    <div class="sidebar-inner slimscrollleft">
+      <div id="sidebar-menu">
+        <ul>
+          <li *ngIf="isSystemAdmin">
+            <a routerLink="organizationmanagement" class="waves-effect"><i class="fa fa-institution"></i><span>
+                Organizations
+                <span class="badge badge-primary pull-right"></span></span></a>
+          </li>
+          <li>
+            <a routerLink="users" class="waves-effect"><i class="glyphicon glyphicon-user"></i><span> Users <span
+                  class="badge badge-primary pull-right"></span></span></a>
+          </li>
+          <li *ngIf="!isSystemAdmin">
+            <a routerLink="projects" class="waves-effect"><i class="mdi mdi-chart-line"></i><span> Projects<span
+                  class="badge badge-primary pull-right"></span></span></a>
+          </li>
+          <li *ngIf="!isSystemAdmin">
+            <a routerLink="customerlist" class="waves-effect"><i class="ti-user"></i><span> Customers <span
+                  class="badge badge-primary pull-right"></span></span></a>
+          </li>
+          <li *ngIf="!isSystemAdmin">
+            <a routerLink="allactivities" class="waves-effect"><i class="mdi mdi-comment-multiple-outline"></i><span> Activities <span
+                  class="badge badge-primary pull-right"></span></span></a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="/frontend/src/app/app.js"></script>
+<div class="content-page">
+  <div class="content">
+    <div class="modal fade organization-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4 class="modal-title" id="myLargeModalLabel">Switch Organization</h4>
+          </div>
+          <div class="modal-body">
+            <table class="table">
+              <thead>
+                <th *ngFor="let org of usersOrganizations">
+                  <button class="btn btn-lg waves-effect waves-light" (click)="changeOrg(org.id)">{{org.name}}</button>
+                </th>
+              </thead>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade changepassword-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4 class="modal-title" id="myLargeModalLabel">Change Password</h4>
+          </div>
+          <div class="modal-body">
+            <app-change-password></app-change-password>
+          </div>
+        </div>
+      </div>
+    </div>
+    <router-outlet></router-outlet>
+  </div>
+</div>
+
+<div class="modal fade showNotifications-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="row no-gutters">
+            <div class="col-md-8 pull-left">
+              <h4 class="modal-title" id="myLargeModalLabel" style="display: inline;">Todo summary</h4>
+            </div>
+            <div class="col-md-3">
+              <div *ngIf="!activity.todoChecked">
+                  <button class="close pull-right" style="font-size: 15px; margin-top: 3px;"
+                  (click)="markTodoDone(activity.id)" data-dismiss="modal" aria-hidden="true">Done
+                  <i class="mdi mdi-checkbox-marked-outline" style="margin-left: 5px;"></i></button>
+              </div>
+              <div *ngIf="activity.todoChecked">
+                  <button class="close pull-right" style="font-size: 15px; margin-top: 3px;"
+                  (click)="markTodoNotDone(activity.id)" data-dismiss="modal" aria-hidden="true">Not Done
+                  <i class="mdi mdi-checkbox-blank-outline" style="margin-left: 5px;"></i></button>
+              </div>
+            </div>
+            <div class="col-md-1">
+            <button type="button" id="closeActivityModal" class="close" data-dismiss="modal" aria-hidden="true"
+            style="display: inline;">×</button>
+            </div>
+          </div>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-5">
+              <h4>{{activity.title}}</h4>
+              <p>{{activity.date | date: "yyyy-MM-dd HH:mm"}}</p>
+              <p>{{activity.creator}}</p>
+            </div>
+            <div class="col-md-7">
+              <p>{{activity.description}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>

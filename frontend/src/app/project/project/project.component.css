@@ -1,0 +1,172 @@
+
+.active{
+  background-color: rgba(143, 241, 187, 0.808);
+  border: solid 0.5px;
+}
+
+.unactive:hover{
+    background-color: rgb(206, 195, 223);
+    border: solid 0.5px;
+}  
+
+.example-card {
+  max-width: 400px;
+  background-color: #f1eff8;
+  margin-bottom: 15px;
+  
+}
+
+.example-card:hover{
+  
+  background-color: darkgray;
+  }
+  .mat-card-title {
+    font-size:15px !important;
+    font-weight: 500 !important;
+}
+  
+.panel{
+  height:100%;
+  width: 100%;
+}
+
+.btn-circle.btn-lg {
+  width: 70px;
+  height: 70px;
+  padding: 10px 16px;
+  border-radius: 35px;
+  font-size: 24px;
+  line-height: 1.33;
+}
+
+.btn-circle {
+  width: 30px;
+  height: 30px;
+  padding: 6px 0px;
+  border-radius: 15px;
+  text-align: center;
+  font-size: 12px;
+  line-height: 1.42857;
+}
+.ellipsis {
+max-width: 40px;
+text-overflow: ellipsis;
+overflow: hidden;
+white-space: nowrap;
+}
+
+.example-container {
+width: 400px;
+max-width: 100%;
+margin: 0 25px 25px 0;
+display: inline-block;
+vertical-align: top;
+}
+
+.example-list {
+border: solid 1px #ccc;
+min-height: 60px;
+background: white;
+border-radius: 4px;
+overflow: hidden;
+display: block;
+}
+
+.example-box {
+padding: 20px 10px;
+border-bottom: solid 1px #ccc;
+color: rgba(0, 0, 0, 0.87);
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+box-sizing: border-box;
+cursor: move;
+background: white;
+font-size: 14px;
+}
+
+.cdk-drag-preview {
+box-sizing: border-box;
+border-radius: 4px;
+box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+            0 8px 10px 1px rgba(0, 0, 0, 0.14),
+            0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.cdk-drag-placeholder {
+opacity: 0;
+}
+
+.cdk-drag-animating {
+transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.example-box:last-child {
+border: none;
+}
+
+.example-list.cdk-drop-list-dragging .example-box:not(.cdk-drag-placeholder) {
+transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+
+.valueChangerIcon {
+    color: rgb(139, 139, 139);
+}
+
+.projectInfoAttributeForm {
+    border-bottom: 1px darkgray solid;
+}
+
+.borderCard {
+  border: 3px;
+  border-color: black;
+}
+
+.circle-text-priority1-3 {
+  display: table-cell;
+  height: 78px; 
+  width: 78px;
+  text-align: center;
+  vertical-align: middle;
+  border-radius: 50%;
+  background: rgb(182, 39, 46);
+  color: #fff;
+  font: 38px "josefin sans", arial;
+}
+
+.circle-text-priority4-6 {
+  display: table-cell;
+  height: 78px; 
+  width: 78px;
+  text-align: center;
+  vertical-align: middle;
+  border-radius: 50%;
+  background: rgb(218, 137, 33);
+  color: #fff;
+  font: 38px "josefin sans", arial;
+}
+
+.circle-text-priority7-9 {
+  display: table-cell;
+  height: 78px; 
+  width: 78px;
+  text-align: center;
+  vertical-align: middle;
+  border-radius: 50%;
+  background: rgb(235, 221, 28);
+  color: #fff;
+  font: 38px "josefin sans", arial;
+}
+
+.circle-text-priority10 {
+  display: table-cell;
+  height: 78px; 
+  width: 78px;
+  text-align: center;
+  vertical-align: middle;
+  border-radius: 50%;
+  background: #1EA69A;
+  color: #fff;
+  font: 38px "josefin sans", arial;
+}

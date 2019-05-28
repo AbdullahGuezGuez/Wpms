@@ -1,0 +1,126 @@
+<div class="container" *ngIf="_authService.loggedIn()">
+    <div class="col-md-12 col-xs-12 col-sm-12">
+        <h2 style="display:inline;">Role Manager</h2>
+        <div class="col-md-2  col-xs-2 pull-right">
+            <a style="display:inline;" type="button" (click)="backToUsers()"
+                class="btn waves-effect btn-default m-t-5 btn-lg pull-right"><i
+                    class="glyphicon glyphicon-remove"></i> </a>
+        </div>
+    </div>
+    <br>
+    <br>
+    <br>
+    <br>
+  <div class="col-md-12">
+    <div class="col-md-4">
+      <div class="col-md-12 pull-left">
+        <div class="panel panel-primary">
+          <div class="panel-body">
+            <h4 class="m-b-30 m-t-0">Roles</h4>
+            <table class="table table-hover" id="datatable-keytable" role="grid">
+              <tbody>
+                <tr class="row" *ngFor="let role of dbRoles">
+                  <a type="button" class="btn waves-effect btn-default m-t-5" (click)='roleInfo(role.id, role.name)'
+                    data-toggle="modal" data-target=".roleuser-modal">
+                    <i class="ti-user"></i> </a>
+                  <td id="{{role.id}}" (click)="changeClaimsOnClick(role.name)"> {{role.name}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12 pull-left">
+        <div class="panel panel-body">
+          <h4 class="m-b-30 m-t-0">Add Roles</h4>
+          <form #registerForm="ngForm" (ngSubmit)="addRole()">
+            <div class="form-group">
+              <input id="rolename" type="text" class="form-control" required minlength="2" maxlength="30"
+                name="rolename" [(ngModel)]="roleModel.rolename" placeholder="Name" #rolename="ngModel">
+              <div *ngIf="rolename.errors && (rolename.dirty || rolename.touched)" class="alert alert-danger">
+              </div>
+            </div>
+            <div class="form-group">
+              <button [disabled]="!registerForm.valid" class="btn btn-primary btn-rounded waves-effect waves-light" type="submit">Add role</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="col-md-12 pull-left">
+        <div class=" panel panel-body">
+          <h4 class="m-b-30 m-t-0">Delete Role</h4>
+          <form (ngSubmit)="roleToDelete()">
+            <div class="form-group">
+              <select id="roleToDelete" class="form-control">
+                <option *ngFor="let role of dbRoles" value="{{role.id}}">
+                  {{role.name}}
+                </option>
+              </select>
+            </div>
+            <div class="form-group">
+              <button type="submit" class="btn btn-danger btn-rounded waves-effect waves-light">Delete role</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-7">
+      <div class="panel panel-primary">
+        <div class="panel-body">
+          <form (ngSubmit)="saveClaimChanges()">
+            <h3 class="m-b-30 m-t-0">{{choosenRoleToShow.Name}}</h3>
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>This role can:</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let claim of claimsToShow">
+                  <td>{{claim.claimValue}}</td>
+                  <div class="checkbox checkbox-primary checkbox-single">
+                    <input id="checkbox{{claim.claimType}}" type="checkbox"
+                      (change)="changeClaimBoolOnClick(claim, $event)" [checked]="claim.hasClaim"
+                      value="{{claim.hasClaim}}" check-list="claim.hasClaim">
+                    <label for="checkbox{{claim.claimType}}"></label>
+                  </div>
+                </tr>
+                <br>
+                <button type="submit" (click)='saveClaimChanges()'
+                  class="btn btn-primary btn-rounded waves-effect waves-light">Save Changes</button>
+              </tbody>
+            </table>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- USERS IN ROLE MODAL -->
+  <div class="modal fade roleuser-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h4 class="modal-title" id="myLargeModalLabel">{{roleInfoName}}</h4>
+        </div>
+        <div class="modal-body">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Users that has this role:</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let user of roleInfoUsers">
+                <td>{{user.userName}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

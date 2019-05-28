@@ -1,0 +1,54 @@
+.middle {
+    border-right-color: black;
+    border-right-width: 200px;
+}
+
+.hover {
+    border:1px solid #EEEEEE;
+}
+
+.hover:hover {
+    background-color: rgb(227, 233, 222);
+    box-shadow: 0 0.3em 0.3em -0.2em var(--hover);
+    transform: translateY(-0.15em); 
+}
+
+.circle-text-priority1-3 {
+    display: table-cell;
+    height: 50px; 
+    width: 50px;
+    text-align: center;
+    vertical-align: middle;
+    border-radius: 50%;
+    background: rgb(182, 39, 46);
+    color: #fff;
+    font: 28px "josefin sans", arial;
+  }
+
+  .circle-text-estimate {
+    display: table-cell;
+    height: 34px; 
+    width: 34px;
+    text-align: center;
+    vertical-align: middle;
+    border-radius: 50%;
+    background: #18C3B5;
+    color: #fff;
+    font: 17px "josefin sans", arial;
+  }
+
+  .circle-text-notestimate {
+    display: table-cell;
+    height: 34px; 
+    width: 34px;
+    text-align: center;
+    vertical-align: middle;
+    border-radius: 50%;
+    background: #F3A09E;
+    color: #fff;
+    font: 17px "josefin sans", arial;
+  }
+
+  .inline {
+      display: inline;
+  }

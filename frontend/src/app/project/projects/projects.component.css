@@ -1,0 +1,36 @@
+.mat-raised-button{
+  margin: 5px;
+}
+table {
+  width: 100%;
+}
+
+.no-records {
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+}
+
+.priority {
+  font-size: 24px;
+}
+
+.btn-padding {
+  padding-left: 2px;
+  padding-right: 2px;
+}
+.progress{
+  height: 2rem;
+}
+.estimated{
+  background-color: #F3A09E;
+}
+.usedTime{
+  background-color: #3ABAAF;
+}
+p.inside{
+  font-size: 15px;
+  margin-top: 3px;
+}

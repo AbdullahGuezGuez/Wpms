@@ -1,0 +1,128 @@
+<div class="container" *ngIf="_authService.loggedIn()">
+  <div class="col-md-12">
+    <h2 class="m-b-30 m-t-0">Organization Manager</h2>
+      <div class="panel panel-body">
+        <h4>All Organizations</h4>
+        <div class="row">
+          <div class="col-md-12 m-r-15">
+
+          
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Trellokey</th>
+                <th>Trellotoken</th>
+                <th>Trelloteam</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let organization of organizations">
+                <td>{{organization.name}}</td>
+                <td>{{organization.trellokey}}</td>
+                <td>{{organization.trellotoken}}</td>
+                <td>{{organization.trelloTeamName}}</td>
+              </tr>
+            </tbody>
+
+          </table>
+        </div>
+        </div>
+      </div>
+      <div class="row">
+
+        <div class="col-md-4">
+          <div class="panel panel-body">
+            <h4 class="m-b-30 m-t-0">Create new Organization <i class="mdi mdi-information-outline m-r-15" data-toggle="tooltip"
+              data-placement="top" title="Make sure the Trellokey and Trellotoken is from an Admin in the Trelloteam you want to add"></i></h4>
+            <form #addOrgForm="ngForm" (ngSubmit)="createNewOrganization()">
+              <div class="form-group">
+                <input type="text" class="form-control" name="name" required minlength="2" maxlength="20" [(ngModel)]="model.name" placeholder="Name" #name="ngModel">
+                <div *ngIf="name.errors && (name.dirty || name.touched)" class="alert alert-danger">
+                  <div [hidden]="!name.errors.required">
+                   name is required! and max 20 characters.
+                  </div>
+                  <div [hidden]="!name.errors.minlength">
+                    name must be at least 2 characters long.
+                  </div>
+              </div>
+              </div>
+              
+              <div class="form-group">
+                <input type="text" class="form-control" name="trellokey" [(ngModel)]="model.trellokey"
+                  placeholder="Trellokey">
+              </div>
+              <div class="form-group">
+                  <input type="text" class="form-control" name="trellotoken" [(ngModel)]="model.trellotoken"
+                    placeholder="Trellotoken">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" name="trelloTeamName" [(ngModel)]="model.trelloTeamName"
+                      placeholder="trelloteam">
+                  </div>
+              <div class="form-group">
+                <button [disabled]="!addOrgForm.valid" class="btn btn-primary btn-rounded waves-effect waves-light" type="submit">Confirm</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="panel panel-body">
+            <h4 class="m-b-30 m-t-0">Update Organization</h4>
+            <form #updateOrgForm="ngForm" (ngSubmit)="updateOrganization()">
+              <div class="form-group">
+                <select id="organizationToUpdate" class="form-control">
+                  <option *ngFor="let organization of organizations" value="{{organization.id}}">
+                    {{organization.name}}
+                  </option>
+                </select>
+              </div>
+              <div class="form-group">
+                <input type="text" class="form-control" name="name"required minlength="2" maxlength="20" [(ngModel)]="updateModel.name" placeholder="Name" #nameUpdate="ngModel">
+                <div *ngIf="nameUpdate.errors && (nameUpdate.dirty || nameUpdate.touched)" class="alert alert-danger">
+                  <div [hidden]="!nameUpdate.errors.required">
+                   name is required! and max 20 characters.
+                  </div>
+                  <div [hidden]="!nameUpdate.errors.minlength">
+                    name must be at least 2 characters long.
+                  </div>
+              </div>
+              </div>
+              <div class="form-group">
+                <input type="text" class="form-control" name="trellokey" [(ngModel)]="updateModel.trellokey" placeholder="Trellokey">
+              </div>
+              <div class="form-group">
+                  <input type="text" class="form-control" name="trellotoken" [(ngModel)]="updateModel.trellotoken" placeholder="Trellotoken">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" name="trelloTeamName" [(ngModel)]="updateModel.trelloTeamName" placeholder="Trelloteam">
+                  </div>
+              <div class="form-group">
+                <button [disabled]="!updateOrgForm.valid"class="btn btn-success btn-rounded waves-effect waves-light" type="submit">Confirm</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="panel panel-body">
+            <h4 class="m-b-30 m-t-0">Delete Organization</h4>
+            <form #deleteOrgForm="ngForm" (ngSubmit)="organizationToDelete()">
+              <div class="form-group">
+                <label for="organizationToDelete" class="control-label">Organization</label>
+                <select id="organizationToDelete" class="form-control">
+                  <option *ngFor="let organization of organizations" value="{{organization.id}}">
+                    {{organization.name}}
+                  </option>
+                </select>
+              </div>
+              <div class="form-group">
+                <button [disabled]="!deleteOrgForm.valid" class="btn-danger btn-rounded" type="submit">Confirm</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+  </div>
+</div>
