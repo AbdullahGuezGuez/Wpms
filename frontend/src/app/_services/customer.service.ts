@@ -5,8 +5,8 @@ import { HttpClient, HttpParams, HttpBackend } from '@angular/common/http';
   providedIn: 'root'
 })
 export class CustomerService {
-  private _baseUrl = 'http://localhost:5000/api/customer/';
-  private _userUrl = 'http://localhost:5000/api/users/';
+  private _baseUrl = 'https://wpms.azurewebsites.net/api/customer/';
+  private _userUrl = 'https://wpms.azurewebsites.net/api/users/';
 
 constructor(private http: HttpClient) { }
 
@@ -71,7 +71,7 @@ constructor(private http: HttpClient) { }
   }
 
   getAllProjectsForCustomer(customer: number) {      //! FLYTTA TILL PROJECTSERVICE NÄR DEN BLIR KLAR 
-    return this.http.get('http://localhost:5000/api/project/projectsforcustomer/' + customer);
+    return this.http.get(this._baseUrl + 'project/projectsforcustomer/' + customer);
   }
 
   getAllActivitiesForCustomer(customer: number) {

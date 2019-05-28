@@ -9,13 +9,13 @@ import { AuthService } from './auth.service';
 })
 export class AdminService {
   
-  private _baseUrl = 'http://localhost:5000/api/';
+  private _baseUrl = 'https://wpms.azurewebsites.net/api/';
   roles: any;
 
   constructor(private http: HttpClient, private authService: AuthService) { }
 
   register(user: any) {
-    return this.http.post('http://localhost:5000/api/admin/register', user).pipe(
+    return this.http.post(this._baseUrl + 'admin/register', user).pipe(
       map((response: any) => {
         const name = response;
       })
@@ -55,11 +55,11 @@ export class AdminService {
   }
 
   getUsersWithRoles() {
-    return this.http.get('http://localhost:5000/api/role/usersWithRoles');
+    return this.http.get(this._baseUrl + 'role/usersWithRoles');
   }
 
   updateUserRoles(user: any, roles: {}) {
-    return this.http.post('http://localhost:5000/api/role/editRoles/' + user, roles);
+    return this.http.post(this._baseUrl + 'api/role/editRoles/' + user, roles);
   }
 
   // updateUserOrganizations(userId: number) {
@@ -67,7 +67,7 @@ export class AdminService {
   // }
   
   getRoles() {
-    return this.http.get('http://localhost:5000/api/role/getRoles');
+    return this.http.get(this._baseUrl + 'api/role/getRoles');
   }
 
   createCustomRole(role: any) {
@@ -101,7 +101,7 @@ export class AdminService {
   }
 
   getAllUsers() {
-    return this.http.get('http://localhost:5000/api/users/allusersinorganization');
+    return this.http.get(this._baseUrl + 'api/users/allusersinorganization');
   }
 
   getUsersOrganizationById(userId: number) {

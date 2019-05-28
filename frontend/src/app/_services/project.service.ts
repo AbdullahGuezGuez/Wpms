@@ -6,7 +6,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class ProjectService {
 
-  private BaseUrl = 'http://localhost:5000/api/project/';
+  private BaseUrl = 'https://wpms.azurewebsites.net/api/';
 
   constructor(public http: HttpClient) { }
 
@@ -28,7 +28,7 @@ export class ProjectService {
   }
 
   updateTrelloData() {
-    return this.http.get('http://localhost:5000/api/trello/updatetrellodata');
+    return this.http.get(this.BaseUrl + 'trello/updatetrellodata');
   }
 
   getAllProjects() {

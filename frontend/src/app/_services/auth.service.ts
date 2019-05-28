@@ -12,7 +12,7 @@ import { isSameMonth } from 'ngx-bootstrap';
 })
 export class AuthService {
   roles: any [];
-  baseUrl = 'http://localhost:5000/api/auth/';
+  baseUrl = 'https://wpms.azurewebsites.net/api/';
   jwtHelper = new JwtHelperService();
   decodedToken: any;
 
