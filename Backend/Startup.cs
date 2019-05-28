@@ -97,7 +97,8 @@ namespace WebApi
             .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddAutoMapper();
             services.AddCors();
-            services.AddDbContext<DataContext>(x => x.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<DataContext>(x => x.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.BuildServiceProvider().GetService<DataContext>().Database.Migrate();
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<IWpmsRepository, WpmsRepository>();
             services.AddTransient<Seed>();
