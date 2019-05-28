@@ -118,7 +118,7 @@ namespace WebApi
                //TA BORT KOMMENTAR SENARE !!!!! ÅTERSTÄLL --> app.UseHsts();
             }
 
-            seeder.SeedUsers();
+            // seeder.SeedUsers();
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseAuthentication();
            // TA BORT KOMMENTAR SENARE !!!!! ÅTERSTÄLL --> app.UseHttpsRedirection();
