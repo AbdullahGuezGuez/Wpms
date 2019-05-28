@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Backend.Models;
 using System;
 using Backend.Models.PMS;
+using Microsoft.EntityFrameworkCore.Design;
 
 namespace Backend.Data
 {
@@ -155,5 +156,15 @@ namespace Backend.Data
 
         }
 
+    }
+    public class DataContextFactory : IDesignTimeDbContextFactory<DataContext>
+    {
+        DataContext IDesignTimeDbContextFactory<DataContext>.CreateDbContext(string[] args)
+        {
+            var optionsBuilder = new DbContextOptionsBuilder<DataContext>();
+            optionsBuilder.UseSqlServer<DataContext>("Server=tcp:wpms-db.database.windows.net,1433;Initial Catalog=WpmsDataBase;Persist Security Info=False;User ID=wpms-admin;Password=Wpasswordms2019;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+
+            return new DataContext(optionsBuilder.Options);
+        }
     }
 }
