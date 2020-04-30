@@ -33,7 +33,7 @@
     "chart.js": "^2.8.0",
     "core-js": "^2.5.4",
     "install": "^0.12.2",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "ng2-charts": "^2.2.2",
     "ngx-bootstrap": "^3.2.0",
     "ngx-tabset": "^2.1.0",
