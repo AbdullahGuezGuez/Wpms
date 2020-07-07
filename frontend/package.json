@@ -37,7 +37,7 @@
     "ng2-charts": "^2.2.2",
     "ngx-bootstrap": "^3.2.0",
     "ngx-tabset": "^2.1.0",
-    "npm": "^6.9.0",
+    "npm": "^6.14.6",
     "rxjs": "~6.3.3",
     "save": "^2.3.3",
     "sweetalert2": "^8.8.1",
